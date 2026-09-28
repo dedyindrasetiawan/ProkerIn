@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kelola Akun Pengguna — Super Admin — ProkerIn" />
+  <title>Kelola Akun — ProkerIn</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <!-- CSS Global ProkerIn -->
+  <link rel="stylesheet" href="../../assets/css/variables.css" />
+  <link rel="stylesheet" href="../../assets/css/layout.css" />
+
+  <!-- CSS khusus halaman -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============================================
+       SIDEBAR (Super Admin)
+       ============================================ -->
+  <aside
+    class="prokerin-sidebar"
+    id="sidebar"
+    aria-label="Navigasi utama Super Admin"
+  >
+    <a
+      href="index.html"
+      class="prokerin-sidebar__brand"
+      aria-label="Beranda ProkerIn"
+    >
+      <span class="prokerin-sidebar__brand-icon">
+        <i class="bi bi-clipboard2-check-fill" aria-hidden="true"></i>
+      </span>
+      <span class="prokerin-sidebar__brand-text">
+        ProkerIn
+        <span class="prokerin-sidebar__brand-tagline">Super Admin</span>
+      </span>
+    </a>
+
+    <nav class="prokerin-sidebar__nav" aria-label="Menu Super Admin">
+      <p class="prokerin-sidebar__section-label">Manajemen</p>
+
+      <a href="index.html" class="prokerin-sidebar__link active">
+        <i class="bi bi-people" aria-hidden="true"></i>
+        <span>Kelola Akun</span>
+      </a>
+
+      <a href="../periode/index.html" class="prokerin-sidebar__link">
+        <i class="bi bi-calendar-range" aria-hidden="true"></i>
+        <span>Periode Kepengurusan</span>
+      </a>
+
+      <a href="../master-ormawa/index.html" class="prokerin-sidebar__link">
+        <i class="bi bi-building" aria-hidden="true"></i>
+        <span>Master Ormawa</span>
+      </a>
+    </nav>
+
+    <div class="prokerin-sidebar__footer">
+      <button
+        type="button"
+        class="prokerin-sidebar__link w-100 border-0 bg-transparent text-start"
+        data-action="logout"
+      >
+        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+        <span>Keluar</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Overlay untuk mobile -->
+  <div class="prokerin-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- ============================================
+       TOPBAR
+       ============================================ -->
+  <header class="prokerin-topbar" role="banner">
+    <div class="d-flex align-items-center gap-3">
+      <button
+        type="button"
+        class="prokerin-topbar__toggle"
+        id="sidebarToggle"
+        aria-label="Buka/tutup menu navigasi"
+        aria-controls="sidebar"
+        aria-expanded="false"
+      >
+        <i class="bi bi-list" aria-hidden="true"></i>
+      </button>
+      <h1 class="prokerin-topbar__title">Kelola Akun Pengguna</h1>
+    </div>
+
+    <div class="prokerin-topbar__user">
+      <div class="prokerin-topbar__user-info d-none d-sm-block text-end">
+        <span class="prokerin-topbar__user-name">Rizky Pratama</span>
+        <span class="prokerin-topbar__user-role">Super Admin</span>
+      </div>
+      <div class="prokerin-topbar__avatar" aria-hidden="true">RP</div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       KONTEN UTAMA
+       ============================================ -->
+  <main class="prokerin-main" role="main">
+    <div class="prokerin-content">
+
+      <!-- Header halaman -->
+      <section class="page-header">
+        <div>
+          <h2 class="page-header__title">Akun Pengguna</h2>
+          <p class="page-header__subtitle">
+            Kelola akun untuk Ketua/Pengurus Ormawa, Admin Kemahasiswaan, dan
+            Super Admin. Setiap akun hanya memiliki satu role dan boleh
+            dikaitkan dengan satu ormawa.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="btn btn-prokerin page-header__cta"
+          id="btnTambahAkun"
+        >
+          <i class="bi bi-plus-lg" aria-hidden="true"></i>
+          Tambah Akun
+        </button>
+      </section>
+
+      <!-- Alert area -->
+      <div
+        id="pageAlert"
+        class="alert d-none"
+        role="alert"
+        aria-live="polite"
+      ></div>
+
+      <!-- Panel tabel -->
+      <section class="prokerin-card" aria-labelledby="tabelAkunHeading">
+        <header class="panel-header">
+          <div>
+            <h3 class="panel-header__title" id="tabelAkunHeading">
+              Daftar Akun
+            </h3>
+            <p class="panel-header__subtitle">
+              Cari, filter, atau kelola status akun
+            </p>
+          </div>
+          <span class="panel-header__count" id="totalCount">0 akun</span>
+        </header>
+
+        <!-- Filter -->
+        <div class="row g-2 mb-3 panel-filters">
+          <div class="col-12 col-md-4">
+            <label for="searchInput" class="visually-hidden">
+              Cari nama atau email
+            </label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">
+                <i class="bi bi-search" aria-hidden="true"></i>
+              </span>
+              <input
+                type="search"
+                class="form-control"
+                id="searchInput"
+                placeholder="Cari nama atau email..."
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="filterRole" class="visually-hidden">Filter role</label>
+            <select class="form-select form-select-sm" id="filterRole">
+              <option value="">Semua Role</option>
+              <option value="ketua_pengurus">Ketua/Pengurus Ormawa</option>
+              <option value="admin_kemahasiswaan">Admin Kemahasiswaan</option>
+              <option value="super_admin">Super Admin</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label for="filterOrmawa" class="visually-hidden">Filter ormawa</label>
+            <select class="form-select form-select-sm" id="filterOrmawa">
+              <option value="">Semua Ormawa</option>
+              <!-- diisi JS -->
+            </select>
+          </div>
+
+          <div class="col-12 col-md-2">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm w-100"
+              id="resetFilter"
+            >
+              <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabel -->
+        <div class="table-responsive">
+          <table
+            class="table table-hover align-middle user-table mb-0"
+            aria-label="Tabel daftar akun pengguna"
+          >
+            <thead>
+              <tr>
+                <th scope="col" style="min-width: 240px;">Nama & Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Ormawa</th>
+                <th scope="col">Status</th>
+                <th scope="col">Login Terakhir</th>
+                <th scope="col" class="text-end">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- diisi JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="empty-state d-none">
+          <i class="bi bi-person-x" aria-hidden="true"></i>
+          <p class="empty-state__title">Tidak ada akun yang cocok</p>
+          <p class="empty-state__desc">
+            Coba ubah filter atau tambah akun baru.
+          </p>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <small>
+          &copy; 2025 ProkerIn &middot; Sistem Informasi Monitoring Program
+          Kerja Ormawa
+        </small>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- ============================================
+       MODAL: Tambah/Edit Akun
+       ============================================ -->
+  <div
+    class="modal fade"
+    id="akunModal"
+    tabindex="-1"
+    aria-labelledby="akunModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <form id="akunForm" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="akunModalLabel">Tambah Akun</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Tutup"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="akunId" />
+
+            <div class="row g-3">
+              <!-- Nama -->
+              <div class="col-12 col-md-6">
+                <label for="akunNama" class="form-label">
+                  Nama Lengkap <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="akunNama"
+                  maxlength="100"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Nama wajib diisi (min. 3 karakter).
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="col-12 col-md-6">
+                <label for="akunEmail" class="form-label">
+                  Email <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="akunEmail"
+                  maxlength="100"
+                  required
+                />
+                <div class="invalid-feedback" id="emailFeedback">
+                  Email wajib diisi dengan format yang benar.
+                </div>
+              </div>
+
+              <!-- Password (hanya saat tambah) -->
+              <div class="col-12 col-md-6" id="passwordField">
+                <label for="akunPassword" class="form-label">
+                  Password Awal <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="akunPassword"
+                    minlength="6"
+                    autocomplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    id="togglePw"
+                    tabindex="-1"
+                  >
+                    <i class="bi bi-eye" id="togglePwIcon" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback" id="pwFeedback">
+                  Password minimal 6 karakter.
+                </div>
+                <div class="form-text">
+                  Sampaikan password ini ke pengguna. Wajib diubah saat
+                  pertama login.
+                </div>
+              </div>
+
+              <!-- Role -->
+              <div class="col-12 col-md-6">
+                <label for="akunRole" class="form-label">
+                  Role <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" id="akunRole" required>
+                  <option value="">Pilih role...</option>
+                  <option value="ketua_pengurus">Ketua/Pengurus Ormawa</option>
+                  <option value="admin_kemahasiswaan">Admin Kemahasiswaan</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+                <div class="invalid-feedback">
+                  Role wajib dipilih.
+                </div>
+              </div>
+
+              <!-- Ormawa -->
+              <div class="col-12 col-md-6" id="ormawaField">
+                <label for="akunOrmawa" class="form-label">
+                  Ormawa <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" id="akunOrmawa">
+                  <option value="">Pilih ormawa...</option>
+                  <!-- diisi JS -->
+                </select>
+                <div class="invalid-feedback">
+                  Ormawa wajib dipilih untuk role Ketua/Pengurus.
+                </div>
+                <div class="form-text" id="ormawaHint">
+                  Hanya untuk role Ketua/Pengurus Ormawa.
+                </div>
+              </div>
+
+              <!-- Status aktif -->
+              <div class="col-12">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="akunAktif"
+                    checked
+                  />
+                  <label class="form-check-label" for="akunAktif">
+                    Akun aktif (dapat login)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button type="submit" class="btn btn-prokerin" id="simpanAkunBtn">
+              <span
+                class="spinner-border spinner-border-sm me-2 d-none"
+                id="simpanSpinner"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <i class="bi bi-save" aria-hidden="true" id="simpanIcon"></i>
+              <span id="simpanText">Simpan</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MODAL: Konfirmasi Nonaktifkan / Aktifkan
+       ============================================ -->
+  <div
+    class="modal fade"
+    id="konfirmasiModal"
+    tabindex="-1"
+    aria-labelledby="konfirmasiModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-body text-center p-4">
+          <div class="konfirmasi-icon" id="konfirmasiIcon">
+            <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+          <h5 class="mt-3 mb-2" id="konfirmasiModalLabel">Konfirmasi</h5>
+          <p class="text-muted mb-4" id="konfirmasiPesan">
+            Yakin ingin melanjutkan?
+          </p>
+          <div class="d-flex gap-2 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              id="konfirmasiOkBtn"
+            >
+              Ya, Lanjutkan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- JS Global ProkerIn -->
+  <script src="../../assets/js/common.js"></script>
+
+  <!-- JS khusus halaman -->
+  <script src="script.js"></script>
+</body>
+</html>

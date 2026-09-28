@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Login ProkerIn — Sistem Informasi Monitoring Program Kerja Organisasi Mahasiswa" />
+  <title>Masuk — ProkerIn</title>
+
+  <!-- Bootstrap 5 CSS via CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <!-- Bootstrap Icons via CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <!-- CSS Global ProkerIn -->
+  <link rel="stylesheet" href="../../assets/css/variables.css" />
+  <link rel="stylesheet" href="../../assets/css/layout.css" />
+
+  <!-- CSS khusus halaman login -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-page">
+  <main class="login-wrapper" role="main">
+    <!-- ===== Panel Branding (Kiri) ===== -->
+    <section class="login-branding" aria-label="Branding ProkerIn">
+      <div class="login-branding__inner">
+        <div class="login-branding__logo">
+          <i class="bi bi-clipboard2-check-fill" aria-hidden="true"></i>
+        </div>
+        <h1 class="login-branding__title">ProkerIn</h1>
+        <p class="login-branding__tagline">
+          Monitoring Program Kerja Ormawa
+        </p>
+        <p class="login-branding__desc">
+          Sistem Informasi terpusat untuk pengajuan, pemantauan progres,
+          dan pelaporan program kerja organisasi mahasiswa.
+        </p>
+
+        <ul class="login-branding__features" aria-label="Fitur utama">
+          <li><i class="bi bi-check2-circle"></i> Pengajuan proker online</li>
+          <li><i class="bi bi-check2-circle"></i> Monitoring status real-time</li>
+          <li><i class="bi bi-check2-circle"></i> Arsip LPJ per periode</li>
+        </ul>
+      </div>
+
+      <footer class="login-branding__footer">
+        <small>&copy; 2025 ProkerIn &middot; IKIP PGRI Bojonegoro</small>
+      </footer>
+    </section>
+
+    <!-- ===== Panel Form Login (Kanan) ===== -->
+    <section class="login-form-panel" aria-label="Form Login">
+      <div class="login-form-panel__inner">
+        <!-- Branding mobile (muncul saat layar kecil) -->
+        <div class="login-mobile-brand d-lg-none">
+          <i class="bi bi-clipboard2-check-fill" aria-hidden="true"></i>
+          <span>ProkerIn</span>
+        </div>
+
+        <header class="login-form-panel__header">
+          <h2 class="login-form-panel__title">Selamat Datang</h2>
+          <p class="login-form-panel__subtitle">
+            Silakan masuk menggunakan akun yang telah diberikan.
+          </p>
+        </header>
+
+        <!-- Area Alert Bootstrap -->
+        <div
+          id="loginAlert"
+          class="alert alert-danger d-none"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <!-- Form Login -->
+        <form
+          id="loginForm"
+          class="login-form"
+          novalidate
+          autocomplete="on"
+        >
+          <!-- Input Email -->
+          <div class="mb-3">
+            <label for="inputEmail" class="form-label">
+              Email
+            </label>
+            <div class="input-group">
+              <span class="input-group-text" id="emailAddon">
+                <i class="bi bi-envelope" aria-hidden="true"></i>
+              </span>
+              <input
+                type="email"
+                class="form-control"
+                id="inputEmail"
+                name="email"
+                placeholder="nama@example.com"
+                aria-describedby="emailAddon"
+                required
+                autofocus
+              />
+            </div>
+            <div class="invalid-feedback" id="emailFeedback">
+              Email tidak boleh kosong.
+            </div>
+          </div>
+
+          <!-- Input Password -->
+          <div class="mb-4">
+            <label for="inputPassword" class="form-label">
+              Password
+            </label>
+            <div class="input-group">
+              <span class="input-group-text" id="passwordAddon">
+                <i class="bi bi-lock" aria-hidden="true"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control"
+                id="inputPassword"
+                name="password"
+                placeholder="Masukkan password"
+                aria-describedby="passwordAddon"
+                required
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="togglePassword"
+                aria-label="Tampilkan atau sembunyikan password"
+                tabindex="-1"
+              >
+                <i class="bi bi-eye" id="togglePasswordIcon" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="invalid-feedback" id="passwordFeedback">
+              Password minimal 6 karakter.
+            </div>
+          </div>
+
+          <!-- Tombol Submit -->
+          <button type="submit" class="btn btn-prokerin w-100" id="submitBtn">
+            <span
+              class="spinner-border spinner-border-sm me-2 d-none"
+              id="submitSpinner"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span id="submitText">Masuk</span>
+          </button>
+        </form>
+
+        <!-- Catatan kecil -->
+        <p class="login-note">
+          <i class="bi bi-info-circle" aria-hidden="true"></i>
+          Hubungi Admin Kemahasiswaan jika belum punya akun.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- JS Global ProkerIn -->
+  <script src="../../assets/js/common.js"></script>
+
+  <!-- JS khusus halaman login -->
+  <script src="script.js"></script>
+</body>
+</html>

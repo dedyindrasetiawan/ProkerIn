@@ -1,0 +1,508 @@
+/* ============================================
+   ProkerIn — Proker Detail Styles
+   ============================================ */
+
+/* === Topbar user (konsisten dgn dashboard) === */
+.prokerin-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+}
+.prokerin-topbar__user-info { line-height: 1.15; }
+.prokerin-topbar__user-name {
+  display: block;
+  font-weight: 600;
+  font-size: var(--prokerin-font-size-sm);
+  color: var(--prokerin-text);
+}
+.prokerin-topbar__user-role {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--prokerin-text-muted);
+}
+.prokerin-topbar__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--prokerin-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* === Breadcrumb === */
+.prokerin-breadcrumb {
+  font-size: 0.8rem;
+  margin-bottom: 0;
+}
+.prokerin-breadcrumb a {
+  color: var(--prokerin-text-muted);
+  text-decoration: none;
+}
+.prokerin-breadcrumb a:hover {
+  color: var(--prokerin-accent);
+  text-decoration: underline;
+}
+.prokerin-breadcrumb .active {
+  color: var(--prokerin-text);
+  font-weight: 500;
+}
+
+/* === Section header (reuse) === */
+.form-section__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--prokerin-spacing-md);
+  padding-bottom: var(--prokerin-spacing-md);
+  margin-bottom: var(--prokerin-spacing-lg);
+  border-bottom: 1px solid var(--prokerin-border);
+}
+.form-section__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--prokerin-radius-md);
+  background: var(--prokerin-primary-soft);
+  color: var(--prokerin-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.form-section__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--prokerin-text);
+  margin: 0 0 0.15rem;
+}
+.form-section__subtitle {
+  font-size: 0.78rem;
+  color: var(--prokerin-text-muted);
+  margin: 0;
+}
+
+/* ============================================
+   HERO (header proker)
+   ============================================ */
+.proker-hero {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--prokerin-spacing-xl);
+  align-items: start;
+}
+
+.proker-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: var(--prokerin-spacing-md);
+}
+
+.proker-hero__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--prokerin-text);
+  margin: 0 0 var(--prokerin-spacing-sm);
+  line-height: 1.35;
+}
+
+.proker-hero__tujuan {
+  font-size: 0.9rem;
+  color: var(--prokerin-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.proker-hero__info {
+  background: #f8f9fc;
+  border-radius: var(--prokerin-radius-md);
+  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-lg);
+  margin: 0;
+  font-size: 0.82rem;
+}
+.proker-hero__info > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--prokerin-spacing-sm);
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--prokerin-border);
+}
+.proker-hero__info > div:last-child { border-bottom: none; }
+.proker-hero__info dt {
+  color: var(--prokerin-text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+.proker-hero__info dt i { color: var(--prokerin-accent); }
+.proker-hero__info dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--prokerin-text);
+  text-align: right;
+}
+
+/* ============================================
+   BADGE
+   ============================================ */
+.badge-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35em 0.7em;
+  border-radius: var(--prokerin-radius-sm);
+  letter-spacing: 0.02em;
+  display: inline-block;
+}
+.badge-status--kategori {
+  background: var(--prokerin-primary-soft);
+  color: var(--prokerin-primary);
+}
+
+/* ============================================
+   PROGRESS OPTIONS
+   ============================================ */
+.progress-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--prokerin-spacing-sm);
+}
+
+.progress-option { margin: 0; }
+.progress-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.progress-option__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-sm);
+  border: 2px solid var(--prokerin-border);
+  border-radius: var(--prokerin-radius-md);
+  cursor: pointer;
+  transition: all var(--prokerin-transition);
+  text-align: center;
+  height: 100%;
+}
+.progress-option__box i {
+  font-size: 1.4rem;
+  color: var(--prokerin-text-muted);
+  transition: color var(--prokerin-transition);
+}
+.progress-option__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--prokerin-text-muted);
+}
+.progress-option input:checked + .progress-option__box {
+  border-color: var(--prokerin-accent);
+  background: #f0f5ff;
+}
+.progress-option input:checked + .progress-option__box i {
+  color: var(--prokerin-accent);
+}
+.progress-option input:checked + .progress-option__box .progress-option__label {
+  color: var(--prokerin-primary);
+}
+.progress-option input:focus-visible + .progress-option__box {
+  outline: 2px solid var(--prokerin-accent);
+  outline-offset: 2px;
+}
+.progress-option input:disabled + .progress-option__box {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ============================================
+   LPJ
+   ============================================ */
+.lpj-existing { margin-bottom: var(--prokerin-spacing-md); }
+
+.lpj-file {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-md);
+  padding: var(--prokerin-spacing-md);
+  background: #f8f9fc;
+  border-radius: var(--prokerin-radius-md);
+  border: 1px solid var(--prokerin-border);
+}
+.lpj-file > i {
+  font-size: 1.8rem;
+  color: var(--prokerin-danger);
+  flex-shrink: 0;
+}
+.lpj-file__info { flex: 1; min-width: 0; }
+.lpj-file__name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--prokerin-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lpj-file__meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--prokerin-text-muted);
+  margin-top: 0.15rem;
+}
+
+.lpj-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.35rem;
+  padding: var(--prokerin-spacing-xl) var(--prokerin-spacing-lg);
+  border: 2px dashed var(--prokerin-border);
+  border-radius: var(--prokerin-radius-md);
+  cursor: pointer;
+  transition: all var(--prokerin-transition);
+  background: #fafbff;
+  margin: 0;
+}
+.lpj-dropzone:hover,
+.lpj-dropzone.dragover {
+  border-color: var(--prokerin-accent);
+  background: #f0f5ff;
+}
+.lpj-dropzone > i {
+  font-size: 2.2rem;
+  color: var(--prokerin-accent);
+}
+.lpj-dropzone__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--prokerin-text);
+}
+.lpj-dropzone__desc {
+  font-size: 0.75rem;
+  color: var(--prokerin-text-muted);
+}
+
+.lpj-selected {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+  padding: var(--prokerin-spacing-md);
+  background: #e8f5ec;
+  border: 1px solid #c3e6cb;
+  border-radius: var(--prokerin-radius-md);
+  font-size: 0.85rem;
+}
+.lpj-selected > i {
+  color: var(--prokerin-success);
+  font-size: 1.2rem;
+}
+.lpj-selected__name {
+  font-weight: 600;
+  color: var(--prokerin-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--prokerin-border);
+}
+
+.timeline__item {
+  position: relative;
+  padding-left: 48px;
+  padding-bottom: var(--prokerin-spacing-lg);
+}
+.timeline__item:last-child { padding-bottom: 0; }
+
+.timeline__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--prokerin-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+.timeline__dot--diajukan { border-color: #ffc107; color: #8a6d3b; background: #fff8e1; }
+.timeline__dot--disetujui { border-color: #0d6efd; color: #0d6efd; background: #e7f0ff; }
+.timeline__dot--revisi { border-color: #0dcaf0; color: #0aa2c0; background: #e6f8fb; }
+.timeline__dot--ditolak { border-color: var(--prokerin-danger); color: var(--prokerin-danger); background: #fdeaea; }
+
+.timeline__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+.timeline__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--prokerin-text);
+  margin: 0;
+}
+.timeline__time {
+  font-size: 0.72rem;
+  color: var(--prokerin-text-muted);
+}
+.timeline__actor {
+  font-size: 0.78rem;
+  color: var(--prokerin-text-muted);
+  margin: 0 0 0.4rem;
+}
+.timeline__catatan {
+  font-size: 0.82rem;
+  color: var(--prokerin-text);
+  line-height: 1.55;
+  padding: var(--prokerin-spacing-sm) var(--prokerin-spacing-md);
+  background: #f8f9fc;
+  border-left: 3px solid var(--prokerin-accent);
+  border-radius: 0 var(--prokerin-radius-sm) var(--prokerin-radius-sm) 0;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ============================================
+   SIDEBAR KANAN
+   ============================================ */
+.sticky-sidebar {
+  position: sticky;
+  top: calc(var(--prokerin-topbar-height) + var(--prokerin-spacing-md));
+}
+.sticky-sidebar__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--prokerin-text);
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+  margin: 0 0 var(--prokerin-spacing-md);
+}
+.sticky-sidebar__title i { color: var(--prokerin-accent); }
+
+.ringkasan-mini {
+  margin: 0;
+  font-size: 0.82rem;
+}
+.ringkasan-mini > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--prokerin-border);
+  gap: 0.5rem;
+}
+.ringkasan-mini > div:last-child { border-bottom: none; }
+.ringkasan-mini dt {
+  font-weight: 500;
+  color: var(--prokerin-text-muted);
+  margin: 0;
+}
+.ringkasan-mini dd {
+  font-weight: 600;
+  color: var(--prokerin-text);
+  margin: 0;
+  text-align: right;
+}
+
+.catatan-box {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  padding: var(--prokerin-spacing-md);
+  border-radius: var(--prokerin-radius-md);
+  border-left: 3px solid var(--prokerin-accent);
+  background: #f0f5ff;
+  color: var(--prokerin-text);
+}
+.catatan-box--empty {
+  border-left-color: var(--prokerin-border);
+  background: #f8f9fc;
+  color: var(--prokerin-text-muted);
+  font-style: italic;
+}
+
+/* ============================================
+   Tombol ProkerIn
+   ============================================ */
+.btn-prokerin {
+  background: var(--prokerin-primary);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  font-size: var(--prokerin-font-size-sm);
+  border-radius: var(--prokerin-radius-md);
+  transition: background var(--prokerin-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.btn-prokerin:hover,
+.btn-prokerin:focus {
+  background: var(--prokerin-primary-light);
+  color: #fff;
+}
+.btn-prokerin:disabled {
+  background: var(--prokerin-primary-light);
+  opacity: 0.7;
+}
+
+/* === Footer === */
+.page-footer {
+  text-align: center;
+  padding: var(--prokerin-spacing-xl) 0 var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted);
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 991.98px) {
+  .proker-hero {
+    grid-template-columns: 1fr;
+  }
+  .sticky-sidebar { position: static; }
+  .progress-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .proker-hero__title { font-size: 1.15rem; }
+  .progress-options {
+    grid-template-columns: 1fr 1fr;
+  }
+}

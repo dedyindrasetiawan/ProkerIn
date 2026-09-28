@@ -1,0 +1,236 @@
+/* ============================================
+   ProkerIn — Super Admin Akun Styles
+   ============================================ */
+
+/* === Topbar user === */
+.prokerin-topbar__user {
+  display: flex; align-items: center; gap: var(--prokerin-spacing-sm);
+}
+.prokerin-topbar__user-info { line-height: 1.15; }
+.prokerin-topbar__user-name {
+  display: block; font-weight: 600;
+  font-size: var(--prokerin-font-size-sm); color: var(--prokerin-text);
+}
+.prokerin-topbar__user-role {
+  display: block; font-size: 0.75rem; color: var(--prokerin-text-muted);
+}
+.prokerin-topbar__avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--prokerin-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px;
+}
+
+/* === Header halaman === */
+.page-header {
+  display: flex; flex-wrap: wrap;
+  justify-content: space-between; align-items: flex-end;
+  gap: var(--prokerin-spacing-md);
+  margin-bottom: var(--prokerin-spacing-xl);
+}
+.page-header__title {
+  font-size: 1.5rem; font-weight: 700; color: var(--prokerin-text);
+  margin: 0 0 var(--prokerin-spacing-xs);
+}
+.page-header__subtitle {
+  font-size: var(--prokerin-font-size-sm); color: var(--prokerin-text-muted);
+  margin: 0; max-width: 720px; line-height: 1.6;
+}
+.page-header__cta {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+
+/* === Panel header === */
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: var(--prokerin-spacing-md); margin-bottom: var(--prokerin-spacing-md);
+}
+.panel-header__title {
+  font-size: 1.1rem; font-weight: 600; color: var(--prokerin-text);
+  margin: 0 0 0.15rem;
+}
+.panel-header__subtitle {
+  font-size: 0.8rem; color: var(--prokerin-text-muted); margin: 0;
+}
+.panel-header__count {
+  font-size: 0.78rem; color: var(--prokerin-text-muted);
+  background: #f8f9fc; padding: 0.3rem 0.7rem;
+  border-radius: var(--prokerin-radius-sm); white-space: nowrap;
+}
+
+/* === Filter === */
+.panel-filters {
+  padding-bottom: var(--prokerin-spacing-md);
+  border-bottom: 1px solid var(--prokerin-border);
+}
+
+/* ============================================
+   Tabel user
+   ============================================ */
+.user-table { font-size: var(--prokerin-font-size-sm); }
+.user-table thead th {
+  background: #f8f9fc; font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--prokerin-text-muted); font-weight: 600;
+  border-bottom: 1px solid var(--prokerin-border);
+  padding: 0.75rem 0.85rem; white-space: nowrap;
+}
+.user-table tbody td {
+  padding: 0.85rem; vertical-align: middle;
+}
+.user-table tbody tr.inactive { opacity: 0.6; }
+
+.user-cell {
+  display: flex; align-items: center; gap: var(--prokerin-spacing-md);
+}
+.user-cell__avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--prokerin-primary-soft); color: var(--prokerin-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.82rem; flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+.user-cell__info { min-width: 0; }
+.user-cell__name {
+  display: block; font-weight: 600; color: var(--prokerin-text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.user-cell__email {
+  display: block; font-size: 0.75rem; color: var(--prokerin-text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Role badge */
+.role-badge {
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.3em 0.65em; border-radius: var(--prokerin-radius-sm);
+  letter-spacing: 0.02em; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+}
+.role-badge--ketua { background: #cfe2ff; color: #0a58ca; }
+.role-badge--admin { background: #d1e7dd; color: #146c43; }
+.role-badge--super { background: #f8d7da; color: #b02a37; }
+
+.user-table__ormawa {
+  font-size: 0.82rem; font-weight: 500; color: var(--prokerin-text);
+}
+.user-table__ormawa-empty {
+  font-size: 0.82rem; color: var(--prokerin-text-muted);
+  font-style: italic;
+}
+
+.status-badge {
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.3em 0.65em; border-radius: var(--prokerin-radius-sm);
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  white-space: nowrap;
+}
+.status-badge--aktif { background: #d1e7dd; color: #146c43; }
+.status-badge--nonaktif { background: #e2e3e5; color: #41464b; }
+.status-badge i { font-size: 0.7rem; }
+
+.user-table__login {
+  font-size: 0.75rem; color: var(--prokerin-text-muted);
+  white-space: nowrap;
+}
+
+/* Action menu */
+.btn-action {
+  width: 32px; height: 32px; padding: 0;
+  border-radius: var(--prokerin-radius-sm);
+  border: 1px solid var(--prokerin-border);
+  background: transparent; color: var(--prokerin-text-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all var(--prokerin-transition);
+}
+.btn-action:hover {
+  border-color: var(--prokerin-accent);
+  color: var(--prokerin-accent);
+  background: #f0f5ff;
+}
+.btn-action.dropdown-toggle::after { display: none; }
+
+.dropdown-menu {
+  font-size: 0.82rem;
+  border-color: var(--prokerin-border);
+  box-shadow: var(--prokerin-shadow-md);
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+}
+.dropdown-item i { font-size: 0.95rem; opacity: 0.7; }
+.dropdown-item--danger { color: var(--prokerin-danger); }
+.dropdown-item--danger:hover { background: #fdeaea; color: #b02a37; }
+
+/* === Empty state === */
+.empty-state {
+  text-align: center; padding: var(--prokerin-spacing-2xl) var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted);
+}
+.empty-state i {
+  font-size: 3rem; opacity: 0.35; display: block;
+  margin-bottom: var(--prokerin-spacing-sm);
+}
+.empty-state__title {
+  font-weight: 600; margin: 0 0 0.25rem; color: var(--prokerin-text);
+}
+.empty-state__desc { font-size: 0.85rem; margin: 0; }
+
+/* === Modal === */
+.modal-header { border-bottom-color: var(--prokerin-border); }
+.modal-footer { border-top-color: var(--prokerin-border); }
+.modal-title { font-weight: 600; }
+
+.modal .form-label {
+  font-weight: 600; font-size: 0.85rem; color: var(--prokerin-text);
+}
+.modal .form-control,
+.modal .form-select {
+  font-size: var(--prokerin-font-size-sm);
+  border-color: var(--prokerin-border);
+}
+.modal .form-control:focus,
+.modal .form-select:focus {
+  border-color: var(--prokerin-accent);
+  box-shadow: 0 0 0 0.2rem rgba(59, 111, 212, 0.15);
+}
+.modal .form-text { font-size: 0.75rem; }
+
+.konfirmasi-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #fff3cd; color: #8a6d3b;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; margin: 0 auto;
+}
+.konfirmasi-icon--success { background: #d1e7dd; color: #146c43; }
+
+/* === Tombol ProkerIn === */
+.btn-prokerin {
+  background: var(--prokerin-primary); border: none; color: #fff;
+  font-weight: 600; padding: 0.6rem 1rem;
+  font-size: var(--prokerin-font-size-sm);
+  border-radius: var(--prokerin-radius-md);
+  transition: background var(--prokerin-transition);
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.btn-prokerin:hover,
+.btn-prokerin:focus {
+  background: var(--prokerin-primary-light); color: #fff;
+}
+.btn-prokerin:disabled {
+  background: var(--prokerin-primary-light); opacity: 0.7;
+}
+
+/* === Footer === */
+.page-footer {
+  text-align: center;
+  padding: var(--prokerin-spacing-xl) 0 var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted); font-size: 0.75rem;
+}
+
+/* === Responsive === */
+@media (max-width: 575.98px) {
+  .page-header__title { font-size: 1.2rem; }
+  .page-header__cta { width: 100%; justify-content: center; }
+}

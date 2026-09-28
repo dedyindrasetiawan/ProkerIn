@@ -1,0 +1,303 @@
+/* ============================================
+   ProkerIn — Admin Ekspor Styles
+   ============================================ */
+
+/* === Topbar user === */
+.prokerin-topbar__user {
+  display: flex; align-items: center; gap: var(--prokerin-spacing-sm);
+}
+.prokerin-topbar__user-info { line-height: 1.15; }
+.prokerin-topbar__user-name {
+  display: block; font-weight: 600;
+  font-size: var(--prokerin-font-size-sm); color: var(--prokerin-text);
+}
+.prokerin-topbar__user-role {
+  display: block; font-size: 0.75rem; color: var(--prokerin-text-muted);
+}
+.prokerin-topbar__avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--prokerin-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px;
+}
+
+/* === Breadcrumb === */
+.prokerin-breadcrumb { font-size: 0.8rem; margin-bottom: 0; }
+.prokerin-breadcrumb a {
+  color: var(--prokerin-text-muted); text-decoration: none;
+}
+.prokerin-breadcrumb a:hover {
+  color: var(--prokerin-accent); text-decoration: underline;
+}
+.prokerin-breadcrumb .active { color: var(--prokerin-text); font-weight: 500; }
+
+/* === Header halaman === */
+.page-header { margin-bottom: var(--prokerin-spacing-xl); }
+.page-header__title {
+  font-size: 1.5rem; font-weight: 700; color: var(--prokerin-text);
+  margin: 0 0 var(--prokerin-spacing-xs);
+}
+.page-header__subtitle {
+  font-size: var(--prokerin-font-size-sm); color: var(--prokerin-text-muted);
+  margin: 0; max-width: 720px; line-height: 1.6;
+}
+
+/* === Section header (reuse) === */
+.form-section__header {
+  display: flex; align-items: flex-start; gap: var(--prokerin-spacing-md);
+  padding-bottom: var(--prokerin-spacing-md);
+  margin-bottom: var(--prokerin-spacing-lg);
+  border-bottom: 1px solid var(--prokerin-border);
+}
+.form-section__icon {
+  width: 40px; height: 40px; border-radius: var(--prokerin-radius-md);
+  background: var(--prokerin-primary-soft); color: var(--prokerin-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; flex-shrink: 0;
+}
+.form-section__title {
+  font-size: 1rem; font-weight: 600; color: var(--prokerin-text);
+  margin: 0 0 0.15rem;
+}
+.form-section__subtitle {
+  font-size: 0.78rem; color: var(--prokerin-text-muted); margin: 0;
+}
+
+/* === Form controls === */
+.prokerin-card .form-label {
+  font-weight: 600; font-size: 0.85rem; color: var(--prokerin-text);
+}
+.prokerin-card .form-control,
+.prokerin-card .form-select {
+  font-size: var(--prokerin-font-size-sm);
+  padding: 0.55rem 0.85rem;
+  border-color: var(--prokerin-border);
+}
+.prokerin-card .form-control:focus,
+.prokerin-card .form-select:focus {
+  border-color: var(--prokerin-accent);
+  box-shadow: 0 0 0 0.2rem rgba(59, 111, 212, 0.15);
+}
+.prokerin-card .form-text {
+  font-size: 0.75rem; color: var(--prokerin-text-muted);
+}
+
+/* ============================================
+   Jenis laporan (radio besar)
+   ============================================ */
+.jenis-options {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--prokerin-spacing-sm);
+}
+.jenis-option { margin: 0; }
+.jenis-option input {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+.jenis-option__box {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 0.3rem;
+  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-sm);
+  border: 2px solid var(--prokerin-border);
+  border-radius: var(--prokerin-radius-md);
+  cursor: pointer; transition: all var(--prokerin-transition);
+  height: 100%;
+}
+.jenis-option__box i {
+  font-size: 1.5rem; color: var(--prokerin-text-muted);
+  transition: color var(--prokerin-transition);
+}
+.jenis-option__title {
+  font-weight: 700; font-size: 0.82rem; color: var(--prokerin-text);
+}
+.jenis-option__desc {
+  font-size: 0.7rem; color: var(--prokerin-text-muted); line-height: 1.35;
+}
+.jenis-option input:checked + .jenis-option__box {
+  border-color: var(--prokerin-accent); background: #f0f5ff;
+}
+.jenis-option input:checked + .jenis-option__box i {
+  color: var(--prokerin-accent);
+}
+.jenis-option input:focus-visible + .jenis-option__box {
+  outline: 2px solid var(--prokerin-accent); outline-offset: 2px;
+}
+
+/* ============================================
+   Format (radio horizontal)
+   ============================================ */
+.format-options {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--prokerin-spacing-sm);
+}
+.format-option { margin: 0; }
+.format-option input {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+.format-option__box {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--prokerin-border);
+  border-radius: var(--prokerin-radius-md);
+  cursor: pointer; transition: all var(--prokerin-transition);
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--prokerin-text);
+}
+.format-option__box i {
+  font-size: 1.4rem; color: var(--prokerin-text-muted);
+}
+.format-option input:checked + .format-option__box {
+  border-color: var(--prokerin-accent); background: #f0f5ff;
+  color: var(--prokerin-primary);
+}
+.format-option input:checked + .format-option__box i {
+  color: var(--prokerin-accent);
+}
+.format-option input:focus-visible + .format-option__box {
+  outline: 2px solid var(--prokerin-accent); outline-offset: 2px;
+}
+
+/* ============================================
+   Riwayat ekspor
+   ============================================ */
+.riwayat-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.riwayat-item {
+  display: flex; align-items: center; gap: var(--prokerin-spacing-md);
+  padding: var(--prokerin-spacing-md) 0;
+  border-bottom: 1px dashed var(--prokerin-border);
+}
+.riwayat-item:last-child { border-bottom: none; }
+.riwayat-item__icon {
+  width: 40px; height: 40px; border-radius: var(--prokerin-radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; flex-shrink: 0;
+}
+.riwayat-item__icon--excel { background: #d1e7dd; color: #146c43; }
+.riwayat-item__icon--pdf { background: #f8d7da; color: #b02a37; }
+.riwayat-item__info { flex: 1; min-width: 0; }
+.riwayat-item__nama {
+  display: block; font-weight: 600; font-size: 0.85rem;
+  color: var(--prokerin-text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.riwayat-item__meta {
+  display: block; font-size: 0.72rem;
+  color: var(--prokerin-text-muted); margin-top: 0.15rem;
+}
+.riwayat-item__size {
+  font-size: 0.72rem; color: var(--prokerin-text-muted);
+  white-space: nowrap;
+}
+.riwayat-empty {
+  text-align: center; padding: var(--prokerin-spacing-lg) 0;
+  color: var(--prokerin-text-muted); font-size: 0.85rem; font-style: italic;
+}
+
+/* ============================================
+   Ringkasan mini (reuse)
+   ============================================ */
+.sticky-sidebar {
+  position: sticky;
+  top: calc(var(--prokerin-topbar-height) + var(--prokerin-spacing-md));
+}
+.sticky-sidebar__title {
+  font-size: 0.9rem; font-weight: 600; color: var(--prokerin-text);
+  display: flex; align-items: center; gap: var(--prokerin-spacing-sm);
+  margin: 0 0 var(--prokerin-spacing-md);
+}
+.sticky-sidebar__title i { color: var(--prokerin-accent); }
+
+.ringkasan-mini { margin: 0; font-size: 0.82rem; }
+.ringkasan-mini > div {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4rem 0; border-bottom: 1px dashed var(--prokerin-border);
+  gap: 0.5rem;
+}
+.ringkasan-mini > div:last-child { border-bottom: none; }
+.ringkasan-mini dt {
+  font-weight: 500; color: var(--prokerin-text-muted); margin: 0;
+}
+.ringkasan-mini dd {
+  font-weight: 600; color: var(--prokerin-text);
+  margin: 0; text-align: right;
+}
+
+/* ============================================
+   Preview box
+   ============================================ */
+.preview-box {
+  border: 1px dashed var(--prokerin-border);
+  border-radius: var(--prokerin-radius-md);
+  background: #fafbff;
+  padding: var(--prokerin-spacing-md);
+  max-height: 340px;
+  overflow-y: auto;
+}
+.preview-empty {
+  font-size: 0.8rem; color: var(--prokerin-text-muted);
+  text-align: center; margin: 0; line-height: 1.55;
+  padding: var(--prokerin-spacing-md) 0;
+}
+.preview-empty i {
+  display: block; font-size: 1.6rem; opacity: 0.5;
+  margin-bottom: 0.4rem;
+}
+.preview-table {
+  width: 100%; font-size: 0.72rem;
+  border-collapse: collapse;
+}
+.preview-table th {
+  text-align: left; font-weight: 600; font-size: 0.68rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--prokerin-text-muted);
+  border-bottom: 1px solid var(--prokerin-border);
+  padding: 0.4rem 0.3rem;
+  position: sticky; top: 0; background: #fafbff;
+}
+.preview-table td {
+  padding: 0.4rem 0.3rem;
+  border-bottom: 1px solid #f0f0f4;
+  color: var(--prokerin-text);
+  vertical-align: top;
+}
+.preview-table td.num {
+  text-align: right; white-space: nowrap;
+}
+
+/* === Tombol ProkerIn === */
+.btn-prokerin {
+  background: var(--prokerin-primary); border: none; color: #fff;
+  font-weight: 600; padding: 0.6rem 1rem;
+  font-size: var(--prokerin-font-size-sm);
+  border-radius: var(--prokerin-radius-md);
+  transition: background var(--prokerin-transition);
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.btn-prokerin:hover,
+.btn-prokerin:focus {
+  background: var(--prokerin-primary-light); color: #fff;
+}
+.btn-prokerin:disabled {
+  background: var(--prokerin-primary-light); opacity: 0.7;
+}
+
+/* === Footer === */
+.page-footer {
+  text-align: center;
+  padding: var(--prokerin-spacing-xl) 0 var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted); font-size: 0.75rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 991.98px) {
+  .sticky-sidebar { position: static; }
+}
+
+@media (max-width: 575.98px) {
+  .page-header__title { font-size: 1.2rem; }
+  .jenis-options { grid-template-columns: 1fr; }
+  .format-options { grid-template-columns: 1fr; }
+}

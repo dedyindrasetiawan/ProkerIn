@@ -1,0 +1,204 @@
+/* ============================================
+   ProkerIn — Shared Layout Styles
+   Sidebar, topbar, dan struktur dashboard
+   (Dipakai oleh halaman ormawa/, admin/, superadmin/)
+   ============================================ */
+
+/* === Sidebar === */
+.prokerin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--prokerin-sidebar-width);
+  height: 100vh;
+  background: var(--prokerin-primary);
+  color: #fff;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--prokerin-transition);
+  overflow-y: auto;
+}
+
+.prokerin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+  padding: var(--prokerin-spacing-lg) var(--prokerin-spacing-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: #fff;
+}
+
+.prokerin-sidebar__brand:hover {
+  color: #fff;
+}
+
+.prokerin-sidebar__brand-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--prokerin-accent);
+  border-radius: var(--prokerin-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.prokerin-sidebar__brand-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.prokerin-sidebar__brand-tagline {
+  font-size: 0.7rem;
+  opacity: 0.65;
+  font-weight: 400;
+  display: block;
+}
+
+.prokerin-sidebar__nav {
+  flex: 1;
+  padding: var(--prokerin-spacing-md) 0;
+}
+
+.prokerin-sidebar__section-label {
+  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-lg)
+    var(--prokerin-spacing-xs);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+  font-weight: 600;
+}
+
+.prokerin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+  padding: 0.65rem var(--prokerin-spacing-lg);
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: var(--prokerin-font-size-sm);
+  transition: background var(--prokerin-transition),
+    color var(--prokerin-transition);
+  border-left: 3px solid transparent;
+}
+
+.prokerin-sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.prokerin-sidebar__link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-left-color: var(--prokerin-accent);
+  font-weight: 600;
+}
+
+.prokerin-sidebar__link i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.prokerin-sidebar__footer {
+  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: var(--prokerin-font-size-sm);
+}
+
+/* === Topbar === */
+.prokerin-topbar {
+  position: fixed;
+  top: 0;
+  left: var(--prokerin-sidebar-width);
+  right: 0;
+  height: var(--prokerin-topbar-height);
+  background: var(--prokerin-surface);
+  border-bottom: 1px solid var(--prokerin-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--prokerin-spacing-lg);
+  z-index: 1030;
+  transition: left var(--prokerin-transition);
+}
+
+.prokerin-topbar__title {
+  font-size: var(--prokerin-font-size-lg);
+  font-weight: 600;
+  margin: 0;
+  color: var(--prokerin-text);
+}
+
+.prokerin-topbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--prokerin-text);
+  cursor: pointer;
+}
+
+/* === Konten Utama === */
+.prokerin-main {
+  margin-left: var(--prokerin-sidebar-width);
+  padding-top: var(--prokerin-topbar-height);
+  min-height: 100vh;
+  background: var(--prokerin-bg);
+  transition: margin-left var(--prokerin-transition);
+}
+
+.prokerin-content {
+  padding: var(--prokerin-spacing-xl);
+}
+
+/* === Overlay untuk mobile === */
+.prokerin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1035;
+}
+
+.prokerin-overlay.show {
+  display: block;
+}
+
+/* === Responsive === */
+@media (max-width: 991.98px) {
+  .prokerin-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .prokerin-sidebar.show {
+    transform: translateX(0);
+  }
+
+  .prokerin-topbar {
+    left: 0;
+  }
+
+  .prokerin-topbar__toggle {
+    display: block;
+  }
+
+  .prokerin-main {
+    margin-left: 0;
+  }
+}
+
+/* === Card umum === */
+.prokerin-card {
+  background: var(--prokerin-surface);
+  border: 1px solid var(--prokerin-border);
+  border-radius: var(--prokerin-radius-lg);
+  box-shadow: var(--prokerin-shadow-sm);
+  padding: var(--prokerin-spacing-lg);
+}
