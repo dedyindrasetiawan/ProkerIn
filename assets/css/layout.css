@@ -1,53 +1,93 @@
 /* ============================================
    ProkerIn — Shared Layout Styles
-   Sidebar, topbar, dan struktur dashboard
-   (Dipakai oleh halaman ormawa/, admin/, superadmin/)
+   Playful / Modern / Rounded Dashboard
    ============================================ */
 
-/* === Sidebar === */
+/* === Base === */
+.prokerin-sidebar,
+.prokerin-topbar,
+.prokerin-main,
+.prokerin-card {
+  font-family: var(--prokerin-font-family);
+}
+
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+
 .prokerin-sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: var(--prokerin-sidebar-width);
   height: 100vh;
-  background: var(--prokerin-primary);
+  background: var(--prokerin-gradient);
   color: #fff;
   z-index: 1040;
+
   display: flex;
   flex-direction: column;
-  transition: transform var(--prokerin-transition);
+
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 8px 0 30px rgba(72, 55, 130, 0.08);
+
+  transition:
+    transform var(--prokerin-transition-smooth);
+
   overflow-y: auto;
+  overflow-x: hidden;
 }
+
+
+/* === Sidebar Brand === */
 
 .prokerin-sidebar__brand {
   display: flex;
   align-items: center;
   gap: var(--prokerin-spacing-sm);
-  padding: var(--prokerin-spacing-lg) var(--prokerin-spacing-lg);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  padding: 1.25rem 1.35rem;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+
   text-decoration: none;
   color: #fff;
+
+  transition:
+    background var(--prokerin-transition),
+    transform var(--prokerin-transition);
 }
 
 .prokerin-sidebar__brand:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .prokerin-sidebar__brand-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--prokerin-accent);
+  width: 40px;
+  height: 40px;
+
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
   border-radius: var(--prokerin-radius-md);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-size: 1.1rem;
   flex-shrink: 0;
+
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.08);
+
+  backdrop-filter: blur(10px);
 }
 
 .prokerin-sidebar__brand-text {
-  font-weight: 700;
+  font-weight: var(--prokerin-font-weight-extrabold);
   font-size: 1.25rem;
   letter-spacing: -0.5px;
   line-height: 1.1;
@@ -55,115 +95,207 @@
 
 .prokerin-sidebar__brand-tagline {
   font-size: 0.7rem;
-  opacity: 0.65;
-  font-weight: 400;
+  opacity: 0.72;
+  font-weight: var(--prokerin-font-weight-normal);
   display: block;
+  margin-top: 3px;
 }
+
+
+/* === Sidebar Navigation === */
 
 .prokerin-sidebar__nav {
   flex: 1;
-  padding: var(--prokerin-spacing-md) 0;
+  padding: 1rem 0.75rem;
 }
 
 .prokerin-sidebar__section-label {
-  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-lg)
-    var(--prokerin-spacing-xs);
-  font-size: 0.7rem;
+  padding:
+    0.9rem 0.75rem 0.45rem;
+
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.5;
-  font-weight: 600;
+  letter-spacing: 0.1em;
+
+  opacity: 0.55;
+  font-weight: var(--prokerin-font-weight-bold);
 }
 
 .prokerin-sidebar__link {
   display: flex;
   align-items: center;
-  gap: var(--prokerin-spacing-sm);
-  padding: 0.65rem var(--prokerin-spacing-lg);
-  color: rgba(255, 255, 255, 0.75);
+  gap: 0.75rem;
+
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.25rem;
+
+  color: rgba(255, 255, 255, 0.76);
+
   text-decoration: none;
   font-size: var(--prokerin-font-size-sm);
-  transition: background var(--prokerin-transition),
-    color var(--prokerin-transition);
-  border-left: 3px solid transparent;
+  font-weight: var(--prokerin-font-weight-medium);
+
+  border: 1px solid transparent;
+  border-radius: var(--prokerin-radius-md);
+
+  transition:
+    background var(--prokerin-transition),
+    color var(--prokerin-transition),
+    transform var(--prokerin-transition),
+    border-color var(--prokerin-transition);
 }
 
 .prokerin-sidebar__link:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.08);
   color: #fff;
+  transform: translateX(3px);
 }
 
 .prokerin-sidebar__link.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.16);
   color: #fff;
-  border-left-color: var(--prokerin-accent);
-  font-weight: 600;
+
+  font-weight: var(--prokerin-font-weight-bold);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .prokerin-sidebar__link i {
   font-size: 1.1rem;
   width: 20px;
   text-align: center;
+  flex-shrink: 0;
 }
 
+
+/* === Sidebar Footer === */
+
 .prokerin-sidebar__footer {
-  padding: var(--prokerin-spacing-md) var(--prokerin-spacing-lg);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.25rem;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.14);
+
   font-size: var(--prokerin-font-size-sm);
 }
 
-/* === Topbar === */
+
+/* ============================================
+   TOPBAR
+   ============================================ */
+
 .prokerin-topbar {
   position: fixed;
   top: 0;
   left: var(--prokerin-sidebar-width);
   right: 0;
+
   height: var(--prokerin-topbar-height);
-  background: var(--prokerin-surface);
+
+  background: rgba(255, 255, 255, 0.9);
   border-bottom: 1px solid var(--prokerin-border);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--prokerin-spacing-lg);
+
+  padding: 0 var(--prokerin-spacing-xl);
+
   z-index: 1030;
-  transition: left var(--prokerin-transition);
+
+  backdrop-filter: blur(14px);
+
+  transition:
+    left var(--prokerin-transition-smooth);
 }
 
 .prokerin-topbar__title {
   font-size: var(--prokerin-font-size-lg);
-  font-weight: 600;
+  font-weight: var(--prokerin-font-weight-bold);
+
   margin: 0;
+
   color: var(--prokerin-text);
+  letter-spacing: -0.25px;
 }
 
 .prokerin-topbar__toggle {
   display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--prokerin-text);
+
+  background: var(--prokerin-primary-soft);
+  border: 0;
+
+  border-radius: var(--prokerin-radius-md);
+
+  font-size: 1.35rem;
+  color: var(--prokerin-primary);
+
   cursor: pointer;
+
+  width: 42px;
+  height: 42px;
+
+  transition:
+    background var(--prokerin-transition),
+    transform var(--prokerin-transition);
 }
 
-/* === Konten Utama === */
+.prokerin-topbar__toggle:hover {
+  background: #e2dcff;
+  transform: scale(1.04);
+}
+
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
 .prokerin-main {
   margin-left: var(--prokerin-sidebar-width);
+
   padding-top: var(--prokerin-topbar-height);
+
   min-height: 100vh;
-  background: var(--prokerin-bg);
-  transition: margin-left var(--prokerin-transition);
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(139, 116, 255, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 10% 80%,
+      rgba(255, 92, 168, 0.05),
+      transparent 25%
+    ),
+    var(--prokerin-bg);
+
+  transition:
+    margin-left var(--prokerin-transition-smooth);
 }
 
 .prokerin-content {
   padding: var(--prokerin-spacing-xl);
 }
 
-/* === Overlay untuk mobile === */
+
+/* ============================================
+   MOBILE OVERLAY
+   ============================================ */
+
 .prokerin-overlay {
   display: none;
+
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+
+  background: rgba(36, 33, 58, 0.38);
+
+  backdrop-filter: blur(3px);
+
   z-index: 1035;
 }
 
@@ -171,10 +303,47 @@
   display: block;
 }
 
-/* === Responsive === */
+
+/* ============================================
+   GENERAL CARD
+   ============================================ */
+
+.prokerin-card {
+  background: var(--prokerin-surface);
+
+  border: 1px solid var(--prokerin-border);
+
+  border-radius: var(--prokerin-radius-xl);
+
+  box-shadow: var(--prokerin-shadow-sm);
+
+  padding: var(--prokerin-spacing-lg);
+
+  transition:
+    transform var(--prokerin-transition-smooth),
+    box-shadow var(--prokerin-transition-smooth),
+    border-color var(--prokerin-transition);
+}
+
+.prokerin-card:hover {
+  border-color: #dfd8f2;
+
+  box-shadow: var(--prokerin-shadow-md);
+
+  transform: translateY(-2px);
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 991.98px) {
   .prokerin-sidebar {
     transform: translateX(-100%);
+
+    box-shadow:
+      12px 0 40px rgba(36, 33, 58, 0.16);
   }
 
   .prokerin-sidebar.show {
@@ -183,22 +352,49 @@
 
   .prokerin-topbar {
     left: 0;
+
+    padding:
+      0 var(--prokerin-spacing-md);
   }
 
   .prokerin-topbar__toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .prokerin-main {
     margin-left: 0;
   }
+
+  .prokerin-content {
+    padding: var(--prokerin-spacing-lg);
+  }
 }
 
-/* === Card umum === */
-.prokerin-card {
-  background: var(--prokerin-surface);
-  border: 1px solid var(--prokerin-border);
-  border-radius: var(--prokerin-radius-lg);
-  box-shadow: var(--prokerin-shadow-sm);
-  padding: var(--prokerin-spacing-lg);
+@media (max-width: 575.98px) {
+  .prokerin-content {
+    padding: var(--prokerin-spacing-md);
+  }
+
+  .prokerin-card {
+    padding: var(--prokerin-spacing-md);
+    border-radius: var(--prokerin-radius-lg);
+  }
+}
+
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .prokerin-sidebar,
+  .prokerin-topbar,
+  .prokerin-main,
+  .prokerin-card,
+  .prokerin-sidebar__link,
+  .prokerin-topbar__toggle {
+    transition: none;
+  }
 }

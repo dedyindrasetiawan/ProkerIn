@@ -4,6 +4,7 @@
 /* ============================================
    ProkerIn — Proker Baru Script
    Validasi form + format input + kirim ke Supabase
+   + auto-set periode_id dari periode aktif ormawa
    ============================================ */
 
 (function () {
@@ -305,23 +306,55 @@
       if (submitIcon) submitIcon.classList.add("d-none");
       submitText.textContent = "Mengirim...";
 
-      const payload = {
-        ormawa_id: ProkerIn.user && ProkerIn.user.ormawa_id,
-        nama: data.nama,
-        tujuan: data.tujuan,
-        kategori: data.kategori,
-        jadwal_mulai: data.jadwal_mulai,
-        jadwal_selesai: data.jadwal_selesai,
-        anggaran: data.anggaran,
-        pj_nama: data.pj_nama,
-        pj_jabatan: data.pj_jabatan,
-      };
+      // === Ambil periode aktif ormawa dulu, sebelum insert ===
+      var ormawaId = ProkerIn.user && ProkerIn.user.ormawa_id;
+
+      if (!ormawaId) {
+        // Safety check — kalau user tidak punya ormawa_id
+        submitBtn.disabled = false;
+        submitSpinner.classList.add("d-none");
+        if (submitIcon) submitIcon.classList.remove("d-none");
+        submitText.textContent = "Ajukan Proker";
+        showAlert(
+          "Akun Anda belum terkait dengan ormawa manapun. " +
+          "Hubungi Super Admin untuk pengaturan.",
+          "danger"
+        );
+        return;
+      }
 
       sb
-        .from("proker")
-        .insert(payload)
-        .select()
-        .single()
+        .from("periode")
+        .select("id")
+        .eq("ormawa_id", ormawaId)
+        .eq("status", "aktif")
+        .maybeSingle()
+        .then(function (periodeRes) {
+          var periodeId = periodeRes && periodeRes.data ? periodeRes.data.id : null;
+
+          if (!periodeId) {
+            console.warn("[ProkerIn] Tidak ada periode aktif untuk ormawa", ormawaId);
+          }
+
+          var payload = {
+            ormawa_id: ormawaId,
+            nama: data.nama,
+            tujuan: data.tujuan,
+            kategori: data.kategori,
+            jadwal_mulai: data.jadwal_mulai,
+            jadwal_selesai: data.jadwal_selesai,
+            anggaran: data.anggaran,
+            pj_nama: data.pj_nama,
+            pj_jabatan: data.pj_jabatan,
+            periode_id: periodeId,
+          };
+
+          return sb
+            .from("proker")
+            .insert(payload)
+            .select()
+            .single();
+        })
         .then(function (res) {
           submitBtn.disabled = false;
           submitSpinner.classList.add("d-none");

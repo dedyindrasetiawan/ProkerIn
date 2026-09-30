@@ -1,177 +1,42 @@
 /* eslint-env browser */
-/* global console, ProkerIn */
+/* global console, ProkerIn, sb, alert */
 
 /* ============================================
    ProkerIn — Admin Dashboard Script
-   Rekap seluruh kampus + filter + rekap per ormawa
+   Data dari Supabase + rekap kampus + filter
    ============================================ */
 
 (function () {
   "use strict";
 
   /* ============================================
-     Data dummy — semua ormawa (lihat lampiran dokumen)
+     State
      ============================================ */
-  const dummyOrmawa = [
-    { id: 1, nama: "HMP UEC", jenis: "hmp" },
-    { id: 2, nama: "HMP PBSI", jenis: "hmp" },
-    { id: 3, nama: "HMP PPKN", jenis: "hmp" },
-    { id: 4, nama: "HMP Ekonomi", jenis: "hmp" },
-    { id: 5, nama: "HMP PTI", jenis: "hmp" },
-    { id: 6, nama: "HMP Matematika", jenis: "hmp" },
-    { id: 7, nama: "UKM Taekwondo", jenis: "ukm" },
-    { id: 8, nama: "UKM LPM Sinergi dan Kepenyiaran", jenis: "ukm" },
-    { id: 9, nama: "UKM KSR", jenis: "ukm" },
-    { id: 10, nama: "UKM Pramuka dan Pecinta Alam", jenis: "ukm" },
-    { id: 11, nama: "UKM UKKI", jenis: "ukm" },
-    { id: 12, nama: "UKM PR", jenis: "ukm" },
-    { id: 13, nama: "UKM Kesenian", jenis: "ukm" },
-    { id: 14, nama: "UKM KOMI", jenis: "ukm" },
-    { id: 15, nama: "UKM Multimedia", jenis: "ukm" },
-    { id: 16, nama: "UKM SAF Musik", jenis: "ukm" },
-  ];
-
-  const dummyProker = [
-    {
-      id: 1, ormawa_id: 5,
-      nama: "Pelatihan Public Speaking Anggota Baru",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-05", jadwal_selesai: "2025-11-07",
-      anggaran: 2500000,
-      status_pengajuan: "disetujui", status_progress: "berjalan",
-    },
-    {
-      id: 2, ormawa_id: 5,
-      nama: "Seminar Nasional Teknologi Pendidikan",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-01", jadwal_selesai: "2025-12-01",
-      anggaran: 7500000,
-      status_pengajuan: "diajukan", status_progress: "belum_mulai",
-    },
-    {
-      id: 3, ormawa_id: 5,
-      nama: "Bakti Sosial Desa Binaan",
-      kategori: "non_pendanaan",
-      jadwal_mulai: "2025-10-20", jadwal_selesai: "2025-10-21",
-      anggaran: 0,
-      status_pengajuan: "disetujui", status_progress: "selesai",
-    },
-    {
-      id: 4, ormawa_id: 2,
-      nama: "Festival Sastra Bulan Bahasa",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-10-28", jadwal_selesai: "2025-10-30",
-      anggaran: 4200000,
-      status_pengajuan: "disetujui", status_progress: "berjalan",
-    },
-    {
-      id: 5, ormawa_id: 2,
-      nama: "Workshop Penulisan Puisi",
-      kategori: "non_pendanaan",
-      jadwal_mulai: "2025-11-12", jadwal_selesai: "2025-11-12",
-      anggaran: 0,
-      status_pengajuan: "diajukan", status_progress: "belum_mulai",
-    },
-    {
-      id: 6, ormawa_id: 3,
-      nama: "Seminar Kebangsaan dan Pancasila",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-18", jadwal_selesai: "2025-11-18",
-      anggaran: 5500000,
-      status_pengajuan: "direvisi", status_progress: "belum_mulai",
-    },
-    {
-      id: 7, ormawa_id: 4,
-      nama: "Pelatihan Akuntansi Dasar",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-22", jadwal_selesai: "2025-11-23",
-      anggaran: 3200000,
-      status_pengajuan: "disetujui", status_progress: "belum_mulai",
-    },
-    {
-      id: 8, ormawa_id: 6,
-      nama: "Olimpiade Matematika Internal",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-05", jadwal_selesai: "2025-12-05",
-      anggaran: 2800000,
-      status_pengajuan: "diajukan", status_progress: "belum_mulai",
-    },
-    {
-      id: 9, ormawa_id: 7,
-      nama: "Kejuaraan Taekwondo Antar Sabuk",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-30", jadwal_selesai: "2025-12-01",
-      anggaran: 6000000,
-      status_pengajuan: "disetujui", status_progress: "berjalan",
-    },
-    {
-      id: 10, ormawa_id: 9,
-      nama: "Donor Darah Bersama PMI",
-      kategori: "non_pendanaan",
-      jadwal_mulai: "2025-10-15", jadwal_selesai: "2025-10-15",
-      anggaran: 0,
-      status_pengajuan: "disetujui", status_progress: "selesai",
-    },
-    {
-      id: 11, ormawa_id: 10,
-      nama: "Kemah Bakti Pramuka",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-20", jadwal_selesai: "2025-12-22",
-      anggaran: 8000000,
-      status_pengajuan: "diajukan", status_progress: "belum_mulai",
-    },
-    {
-      id: 12, ormawa_id: 11,
-      nama: "Kajian Rutin Keislaman",
-      kategori: "non_pendanaan",
-      jadwal_mulai: "2025-11-08", jadwal_selesai: "2025-11-08",
-      anggaran: 0,
-      status_pengajuan: "disetujui", status_progress: "selesai",
-    },
-    {
-      id: 13, ormawa_id: 13,
-      nama: "Pentas Seni Akhir Tahun",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-15", jadwal_selesai: "2025-12-15",
-      anggaran: 9000000,
-      status_pengajuan: "direvisi", status_progress: "belum_mulai",
-    },
-    {
-      id: 14, ormawa_id: 15,
-      nama: "Workshop Videografi dan Editing",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-25", jadwal_selesai: "2025-11-26",
-      anggaran: 3500000,
-      status_pengajuan: "ditolak", status_progress: "belum_mulai",
-    },
-    {
-      id: 15, ormawa_id: 16,
-      nama: "Konser Mini SAF Musik",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-08", jadwal_selesai: "2025-12-08",
-      anggaran: 4000000,
-      status_pengajuan: "disetujui", status_progress: "belum_mulai",
-    },
-  ];
+  var ormawaMap = {}; // id -> { nama, jenis }
+  var semuaProker = []; // cache hasil fetch
 
   /* ============================================
      Mapping label & badge
      ============================================ */
-  const labelPengajuan = {
-    diajukan: "Diajukan", direvisi: "Direvisi",
-    disetujui: "Disetujui", ditolak: "Ditolak",
+  var labelPengajuan = {
+    diajukan: "Diajukan",
+    direvisi: "Direvisi",
+    disetujui: "Disetujui",
+    ditolak: "Ditolak",
   };
-  const badgePengajuan = {
+  var badgePengajuan = {
     diajukan: "badge bg-warning text-dark",
     direvisi: "badge bg-info text-dark",
     disetujui: "badge bg-primary",
     ditolak: "badge bg-danger",
   };
-  const labelProgress = {
-    belum_mulai: "Belum Mulai", berjalan: "Berjalan",
-    selesai: "Selesai", ditunda: "Ditunda",
+  var labelProgress = {
+    belum_mulai: "Belum Mulai",
+    berjalan: "Berjalan",
+    selesai: "Selesai",
+    ditunda: "Ditunda",
   };
-  const badgeProgress = {
+  var badgeProgress = {
     belum_mulai: "badge bg-secondary",
     berjalan: "badge bg-success",
     selesai: "badge bg-dark",
@@ -179,26 +44,22 @@
   };
 
   /* ============================================
-     Helper
+     Helper format (lokal, sesuai gaya existing)
      ============================================ */
-  function getOrmawaById(id) {
-    return (
-      dummyOrmawa.find(function (o) {
-        return o.id === id;
-      }) || { id: id, nama: "Ormawa #" + id, jenis: "-" }
-    );
-  }
-
   function formatRupiah(angka) {
-    if (!angka || angka === 0) return "Rp0";
+    if (typeof ProkerIn !== "undefined" && ProkerIn.formatRupiah) {
+      return ProkerIn.formatRupiah(angka);
+    }
+    angka = Number(angka);
+    if (isNaN(angka)) return "Rp0";
     return "Rp" + angka.toLocaleString("id-ID");
   }
 
   function formatTanggalSingkat(dateStr) {
     if (!dateStr) return "-";
-    const d = new Date(dateStr);
+    var d = new Date(dateStr);
     if (isNaN(d.getTime())) return "-";
-    const bulan = [
+    var bulan = [
       "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
       "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
     ];
@@ -219,39 +80,46 @@
       .replace(/'/g, "&#039;");
   }
 
+  function getOrmawa(id) {
+    return ormawaMap[id] || { id: id, nama: "Ormawa #" + id, jenis: "-" };
+  }
+
   /* ============================================
-     Render statistik ringkasan
+     Render statistik
      ============================================ */
   function renderStatistik(data) {
-    const counts = { diajukan: 0, disetujui: 0, berjalan: 0, selesai: 0 };
+    var counts = { diajukan: 0, disetujui: 0, berjalan: 0, selesai: 0 };
     data.forEach(function (p) {
       if (p.status_pengajuan === "diajukan") counts.diajukan++;
       if (p.status_pengajuan === "disetujui") counts.disetujui++;
       if (p.status_progress === "berjalan") counts.berjalan++;
       if (p.status_progress === "selesai") counts.selesai++;
     });
-    document.getElementById("statDiajukan").textContent = counts.diajukan;
-    document.getElementById("statDisetujui").textContent = counts.disetujui;
-    document.getElementById("statBerjalan").textContent = counts.berjalan;
-    document.getElementById("statSelesai").textContent = counts.selesai;
+    var elD = document.getElementById("statDiajukan");
+    var elS = document.getElementById("statDisetujui");
+    var elB = document.getElementById("statBerjalan");
+    var elF = document.getElementById("statSelesai");
+    if (elD) elD.textContent = counts.diajukan;
+    if (elS) elS.textContent = counts.disetujui;
+    if (elB) elB.textContent = counts.berjalan;
+    if (elF) elF.textContent = counts.selesai;
   }
 
   /* ============================================
      Render rekap per ormawa (kartu)
      ============================================ */
   function renderRekapOrmawa(data) {
-    const container = document.getElementById("rekapOrmawaList");
+    var container = document.getElementById("rekapOrmawaList");
     if (!container) return;
 
-    // Kelompokkan per ormawa
-    const perOrmawa = {};
+    var perOrmawa = {};
     data.forEach(function (p) {
       if (!perOrmawa[p.ormawa_id]) {
         perOrmawa[p.ormawa_id] = {
           total: 0, diajukan: 0, disetujui: 0, berjalan: 0, selesai: 0,
         };
       }
-      const g = perOrmawa[p.ormawa_id];
+      var g = perOrmawa[p.ormawa_id];
       g.total++;
       if (p.status_pengajuan === "diajukan") g.diajukan++;
       if (p.status_pengajuan === "disetujui") g.disetujui++;
@@ -259,15 +127,14 @@
       if (p.status_progress === "selesai") g.selesai++;
     });
 
-    // Urutkan by total desc
-    const entries = Object.keys(perOrmawa)
+    var entries = Object.keys(perOrmawa)
       .map(function (k) {
         return { ormawa_id: parseInt(k, 10), data: perOrmawa[k] };
       })
       .sort(function (a, b) {
         return b.data.total - a.data.total;
       })
-      .slice(0, 8); // tampilkan 8 teratas
+      .slice(0, 8);
 
     if (!entries.length) {
       container.innerHTML =
@@ -277,8 +144,8 @@
 
     container.innerHTML = entries
       .map(function (e) {
-        const o = getOrmawaById(e.ormawa_id);
-        const d = e.data;
+        var o = getOrmawa(e.ormawa_id);
+        var d = e.data;
         return (
           '<div class="col-12 col-sm-6 col-lg-3">' +
             '<article class="ormawa-card">' +
@@ -287,7 +154,7 @@
                   escapeHtml(o.nama) +
                 "</h4>" +
                 '<span class="ormawa-card__jenis">' +
-                  escapeHtml(o.jenis.toUpperCase()) +
+                  escapeHtml((o.jenis || "-").toUpperCase()) +
                 "</span>" +
               "</div>" +
               '<p class="ormawa-card__total">' +
@@ -312,16 +179,15 @@
   }
 
   /* ============================================
-     Render tabel semua pengajuan
+     Render tabel
      ============================================ */
   function renderTabel(data) {
-    const tbody = document.getElementById("prokerTableBody");
-    const emptyState = document.getElementById("emptyState");
-    const totalCount = document.getElementById("totalCount");
+    var tbody = document.getElementById("prokerTableBody");
+    var emptyState = document.getElementById("emptyState");
+    var totalCount = document.getElementById("totalCount");
     if (!tbody) return;
 
     if (totalCount) totalCount.textContent = data.length + " proker";
-
     tbody.innerHTML = "";
 
     if (!data.length) {
@@ -331,11 +197,11 @@
     if (emptyState) emptyState.classList.add("d-none");
 
     data.forEach(function (p) {
-      const ormawa = getOrmawaById(p.ormawa_id);
-      const kategoriLabel =
+      var ormawa = getOrmawa(p.ormawa_id);
+      var kategoriLabel =
         p.kategori === "pendanaan" ? "Pendanaan" : "Non-pendanaan";
 
-      const tr = document.createElement("tr");
+      var tr = document.createElement("tr");
       tr.innerHTML =
         "<td>" +
           '<span class="proker-table__nama">' +
@@ -350,7 +216,7 @@
             escapeHtml(ormawa.nama) +
           "</span>" +
           '<span class="proker-table__ormawa-jenis">' +
-            escapeHtml(ormawa.jenis) +
+            escapeHtml(ormawa.jenis || "-") +
           "</span>" +
         "</td>" +
         '<td class="proker-table__jadwal">' +
@@ -393,13 +259,13 @@
   }
 
   /* ============================================
-     Isi dropdown filter ormawa
+     Populate dropdown filter ormawa
      ============================================ */
-  function populateFilterOrmawa() {
-    const sel = document.getElementById("filterOrmawa");
+  function populateFilterOrmawa(list) {
+    var sel = document.getElementById("filterOrmawa");
     if (!sel) return;
-    dummyOrmawa.forEach(function (o) {
-      const opt = document.createElement("option");
+    list.forEach(function (o) {
+      var opt = document.createElement("option");
       opt.value = String(o.id);
       opt.textContent = o.nama;
       sel.appendChild(opt);
@@ -410,11 +276,11 @@
      Filter
      ============================================ */
   function applyFilter() {
-    const fOrmawa = document.getElementById("filterOrmawa").value;
-    const fPengajuan = document.getElementById("filterPengajuan").value;
-    const fProgress = document.getElementById("filterProgress").value;
+    var fOrmawa = document.getElementById("filterOrmawa").value;
+    var fPengajuan = document.getElementById("filterPengajuan").value;
+    var fProgress = document.getElementById("filterProgress").value;
 
-    const filtered = dummyProker.filter(function (p) {
+    var filtered = semuaProker.filter(function (p) {
       if (fOrmawa && String(p.ormawa_id) !== fOrmawa) return false;
       if (fPengajuan && p.status_pengajuan !== fPengajuan) return false;
       if (fProgress && p.status_progress !== fProgress) return false;
@@ -425,18 +291,63 @@
   }
 
   /* ============================================
+     Fetch dari Supabase
+     ============================================ */
+  async function muatData() {
+    var results = await Promise.all([
+      sb
+        .from("proker")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      sb.from("ormawa").select("id, nama, jenis").order("nama"),
+    ]);
+
+    var prokerRes = results[0];
+    var ormawaRes = results[1];
+
+    if (prokerRes.error) {
+      console.error("[ProkerIn] Gagal memuat proker:", prokerRes.error);
+      alert("Gagal memuat data proker. Coba muat ulang halaman.");
+      return { proker: [], ormawa: [] };
+    }
+    if (ormawaRes.error) {
+      console.error("[ProkerIn] Gagal memuat ormawa:", ormawaRes.error);
+      alert("Gagal memuat data ormawa. Coba muat ulang halaman.");
+      return { proker: [], ormawa: [] };
+    }
+
+    return {
+      proker: prokerRes.data || [],
+      ormawa: ormawaRes.data || [],
+    };
+  }
+
+  /* ============================================
      Inisialisasi
      ============================================ */
-  document.addEventListener("DOMContentLoaded", function () {
-    populateFilterOrmawa();
-    renderStatistik(dummyProker);
-    renderRekapOrmawa(dummyProker);
-    renderTabel(dummyProker);
+  document.addEventListener("DOMContentLoaded", async function () {
+    await ProkerIn.ready; // WAJIB: tunggu sesi & role terverifikasi
 
-    const fOrmawa = document.getElementById("filterOrmawa");
-    const fPengajuan = document.getElementById("filterPengajuan");
-    const fProgress = document.getElementById("filterProgress");
-    const resetBtn = document.getElementById("resetFilter");
+    var hasil = await muatData();
+    semuaProker = hasil.proker;
+
+    // Build map ormawa untuk lookup cepat
+    ormawaMap = {};
+    hasil.ormawa.forEach(function (o) {
+      ormawaMap[o.id] = o;
+    });
+
+    // Render
+    populateFilterOrmawa(hasil.ormawa);
+    renderStatistik(semuaProker);
+    renderRekapOrmawa(semuaProker);
+    renderTabel(semuaProker);
+
+    // Event filter
+    var fOrmawa = document.getElementById("filterOrmawa");
+    var fPengajuan = document.getElementById("filterPengajuan");
+    var fProgress = document.getElementById("filterProgress");
+    var resetBtn = document.getElementById("resetFilter");
 
     if (fOrmawa) fOrmawa.addEventListener("change", applyFilter);
     if (fPengajuan) fPengajuan.addEventListener("change", applyFilter);
