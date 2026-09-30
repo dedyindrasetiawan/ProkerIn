@@ -1,0 +1,308 @@
+/* ============================================
+   ProkerIn — Ormawa Dashboard Styles
+   ============================================ */
+
+/* === Topbar user area === */
+.prokerin-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-sm);
+}
+
+.prokerin-topbar__user-info {
+  line-height: 1.15;
+}
+
+.prokerin-topbar__user-name {
+  display: block;
+  font-weight: 600;
+  font-size: var(--prokerin-font-size-sm);
+  color: var(--prokerin-text);
+}
+
+.prokerin-topbar__user-role {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--prokerin-text-muted);
+}
+
+.prokerin-topbar__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--prokerin-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Header halaman
+   ============================================ */
+.dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--prokerin-spacing-md);
+  margin-bottom: var(--prokerin-spacing-xl);
+}
+
+.dashboard-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--prokerin-text);
+  margin: 0 0 var(--prokerin-spacing-xs);
+}
+
+.dashboard-header__subtitle {
+  font-size: var(--prokerin-font-size-sm);
+  color: var(--prokerin-text-muted);
+  margin: 0;
+}
+
+.dashboard-header__subtitle i {
+  color: var(--prokerin-accent);
+  margin-right: 0.35rem;
+}
+
+.dashboard-header__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ============================================
+   Kartu statistik
+   ============================================ */
+.stat-card {
+  background: var(--prokerin-surface);
+  border: 1px solid var(--prokerin-border);
+  border-radius: var(--prokerin-radius-lg);
+  box-shadow: var(--prokerin-shadow-sm);
+  padding: var(--prokerin-spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--prokerin-spacing-md);
+  height: 100%;
+  transition: box-shadow var(--prokerin-transition),
+    transform var(--prokerin-transition);
+}
+
+.stat-card:hover {
+  box-shadow: var(--prokerin-shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--prokerin-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.stat-card__body {
+  min-width: 0;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--prokerin-text-muted);
+  margin: 0 0 0.15rem;
+  font-weight: 500;
+}
+
+.stat-card__value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--prokerin-text);
+  margin: 0;
+  line-height: 1;
+}
+
+/* Varian warna kartu */
+.stat-card--diajukan .stat-card__icon {
+  background: #fff3cd;
+  color: #8a6d3b;
+}
+
+.stat-card--disetujui .stat-card__icon {
+  background: #cfe2ff;
+  color: #0a58ca;
+}
+
+.stat-card--berjalan .stat-card__icon {
+  background: #d1e7dd;
+  color: #146c43;
+}
+
+.stat-card--selesai .stat-card__icon {
+  background: #e2e3e5;
+  color: #41464b;
+}
+
+/* ============================================
+   Panel & Tabel
+   ============================================ */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--prokerin-spacing-md);
+}
+
+.panel-header__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--prokerin-text);
+  margin: 0 0 0.15rem;
+}
+
+.panel-header__subtitle {
+  font-size: 0.8rem;
+  color: var(--prokerin-text-muted);
+  margin: 0;
+}
+
+.panel-filters {
+  padding-bottom: var(--prokerin-spacing-md);
+  border-bottom: 1px solid var(--prokerin-border);
+}
+
+.proker-table {
+  font-size: var(--prokerin-font-size-sm);
+}
+
+.proker-table thead th {
+  background: #f8f9fc;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--prokerin-text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--prokerin-border);
+  padding: 0.75rem 0.85rem;
+  white-space: nowrap;
+}
+
+.proker-table tbody td {
+  padding: 0.85rem;
+  vertical-align: middle;
+}
+
+.proker-table__nama {
+  font-weight: 600;
+  color: var(--prokerin-text);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.proker-table__kategori {
+  font-size: 0.75rem;
+  color: var(--prokerin-text-muted);
+}
+
+.proker-table__jadwal {
+  font-size: 0.8rem;
+  color: var(--prokerin-text-muted);
+  white-space: nowrap;
+}
+
+.proker-table__jadwal i {
+  color: var(--prokerin-accent);
+  margin-right: 0.25rem;
+}
+
+/* Badge status */
+.badge-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35em 0.7em;
+  border-radius: var(--prokerin-radius-sm);
+  letter-spacing: 0.02em;
+}
+
+/* Tombol aksi */
+.btn-detail {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--prokerin-radius-sm);
+  border: 1px solid var(--prokerin-primary);
+  color: var(--prokerin-primary);
+  background: transparent;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background var(--prokerin-transition),
+    color var(--prokerin-transition);
+}
+
+.btn-detail:hover {
+  background: var(--prokerin-primary);
+  color: #fff;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: var(--prokerin-spacing-2xl) var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  opacity: 0.35;
+  display: block;
+  margin-bottom: var(--prokerin-spacing-sm);
+}
+
+.empty-state__title {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--prokerin-text);
+}
+
+.empty-state__desc {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Footer halaman */
+.dashboard-footer {
+  text-align: center;
+  padding: var(--prokerin-spacing-xl) 0 var(--prokerin-spacing-md);
+  color: var(--prokerin-text-muted);
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 575.98px) {
+  .dashboard-header__title {
+    font-size: 1.2rem;
+  }
+
+  .stat-card {
+    padding: var(--prokerin-spacing-md);
+  }
+
+  .stat-card__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.15rem;
+  }
+
+  .stat-card__value {
+    font-size: 1.3rem;
+  }
+}

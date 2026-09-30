@@ -1,47 +1,103 @@
 /* ============================================
    ProkerIn — Common Functions
-   Fungsi umum: toggle sidebar, logout, helper
+   Guard halaman (Supabase Auth + cek role), sidebar,
+   logout, helper format
    ============================================ */
 
-   /* ============================================
-   Proteksi Halaman — redirect ke login jika belum login
+/* ============================================
+   Guard halaman — sembunyikan halaman sampai sesi
+   & role terverifikasi, lalu redirect jika tidak sesuai
    ============================================ */
-(function guardPage() {
-  // Daftar halaman yang DIPROTEKSI (semua dashboard)
-  const protectedPaths = ["/ormawa/", "/admin/", "/superadmin/"];
-  const currentPath = window.location.pathname.replace(/\\/g, "/");
+(function () {
+  "use strict";
 
-  const isProtected = protectedPaths.some(function (p) {
-    return currentPath.indexOf(p) !== -1;
-  });
+  var LOGIN_URL = "../../auth/login/index.html";
 
-  if (!isProtected) return;
+  // Folder -> role yang boleh masuk
+  var ACCESS = {
+    ormawa: ["ketua_pengurus"],
+    admin: ["admin_kemahasiswaan", "super_admin"],
+    superadmin: ["super_admin"],
+  };
 
-  let user = null;
-  try {
-    user = JSON.parse(sessionStorage.getItem("prokerin_user") || "null");
-  } catch (err) {
-    user = null;
+  // Halaman utama tiap role (untuk redirect jika salah folder)
+  var HOME = {
+    ketua_pengurus: "../../ormawa/dashboard/index.html",
+    admin_kemahasiswaan: "../../admin/dashboard/index.html",
+    super_admin: "../../superadmin/akun/index.html",
+  };
+
+  var segments = window.location.pathname.replace(/\\/g, "/").split("/");
+  var area = null;
+  for (var i = 0; i < segments.length; i++) {
+    if (ACCESS[segments[i]]) area = segments[i];
   }
 
-  if (!user || !user.role) {
-    // Belum login → balik ke login
-    const depth = (currentPath.match(/\//g) || []).length;
-    // naik 3 level dari /prokerin/ormawa/dashboard/index.html ke /prokerin/auth/login/
-    window.location.href = "../../auth/login/index.html";
+  window.ProkerIn = window.ProkerIn || {};
+
+  // Halaman publik (login): tidak perlu guard
+  if (!area) {
+    window.ProkerIn.ready = Promise.resolve(null);
+    return;
   }
+
+  document.documentElement.style.visibility = "hidden";
+
+  function redirect(url) {
+    window.location.replace(url);
+  }
+
+  window.ProkerIn.ready = (async function () {
+    if (!window.sb) {
+      console.error("[ProkerIn] Supabase client tidak ditemukan.");
+      return redirect(LOGIN_URL);
+    }
+
+    var sessionRes = await window.sb.auth.getSession();
+    var session = sessionRes.data && sessionRes.data.session;
+    if (!session) return redirect(LOGIN_URL);
+
+    var profRes = await window.sb
+      .from("profiles")
+      .select("nama, email, role, ormawa_id, aktif")
+      .eq("id", session.user.id)
+      .single();
+    var profile = profRes.data;
+
+    if (profRes.error || !profile || !profile.aktif) {
+      await window.sb.auth.signOut();
+      return redirect(LOGIN_URL);
+    }
+
+    if (ACCESS[area].indexOf(profile.role) === -1) {
+      return redirect(HOME[profile.role] || LOGIN_URL);
+    }
+
+    window.ProkerIn.user = profile;
+
+    // Isi nama user di topbar / elemen bertanda data-user-name
+    document.addEventListener("DOMContentLoaded", fillUser);
+    if (document.readyState !== "loading") fillUser();
+    function fillUser() {
+      document
+        .querySelectorAll(".prokerin-topbar__user-name, [data-user-name]")
+        .forEach(function (el) {
+          el.textContent = profile.nama;
+        });
+    }
+
+    document.documentElement.style.visibility = "";
+    return profile;
+  })();
 })();
 
 (function () {
   "use strict";
 
-  /**
-   * Toggle sidebar untuk tampilan mobile
-   */
   function initSidebarToggle() {
-    const toggleBtn = document.getElementById("sidebarToggle");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebarOverlay");
+    var toggleBtn = document.getElementById("sidebarToggle");
+    var sidebar = document.getElementById("sidebar");
+    var overlay = document.getElementById("sidebarOverlay");
 
     if (!toggleBtn || !sidebar) return;
 
@@ -59,69 +115,55 @@
   }
 
   /**
-   * Logout sederhana (simulasi)
+   * Logout — akhiri sesi Supabase lalu kembali ke login
    */
   function initLogout() {
-    const logoutBtns = document.querySelectorAll("[data-action='logout']");
-    logoutBtns.forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        const konfirmasi = confirm("Yakin ingin keluar dari ProkerIn?");
-        if (konfirmasi) {
-          // Simulasi logout — nanti diganti redirect ke login
-          console.log("[ProkerIn] Logout berhasil.");
-          window.location.href = "../../auth/login/index.html";
-        }
+    document
+      .querySelectorAll("[data-action='logout']")
+      .forEach(function (btn) {
+        btn.addEventListener("click", async function (e) {
+          e.preventDefault();
+          if (!confirm("Yakin ingin keluar dari ProkerIn?")) return;
+          try {
+            if (window.sb) await window.sb.auth.signOut();
+          } catch (err) {
+            console.warn("[ProkerIn] signOut gagal:", err);
+          }
+          window.location.replace("../../auth/login/index.html");
+        });
       });
-    });
   }
 
-  /**
-   * Highlight menu aktif berdasarkan URL saat ini
-   */
   function initActiveMenu() {
-    const currentPath = window.location.pathname;
-    const links = document.querySelectorAll(".prokerin-sidebar__link");
-    links.forEach(function (link) {
-      const href = link.getAttribute("href");
+    var currentPath = window.location.pathname;
+    document.querySelectorAll(".prokerin-sidebar__link").forEach(function (link) {
+      var href = link.getAttribute("href");
       if (href && currentPath.includes(href.replace("../", ""))) {
         link.classList.add("active");
       }
     });
   }
 
-  /**
-   * Helper: format tanggal ke format Indonesia
-   * @param {string|Date} date
-   * @returns {string}
-   */
   function formatTanggal(date) {
-    const d = new Date(date);
+    var d = new Date(date);
     if (isNaN(d.getTime())) return "-";
-    const bulan = [
+    var bulan = [
       "Januari", "Februari", "Maret", "April", "Mei", "Juni",
       "Juli", "Agustus", "September", "Oktober", "November", "Desember",
     ];
     return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
   }
 
-  /**
-   * Helper: format angka ke Rupiah
-   * @param {number} angka
-   * @returns {string}
-   */
   function formatRupiah(angka) {
-    if (typeof angka !== "number" || isNaN(angka)) return "Rp0";
+    angka = Number(angka);
+    if (isNaN(angka)) return "Rp0";
     return "Rp" + angka.toLocaleString("id-ID");
   }
 
-  // Ekspos helper ke global scope
-  window.ProkerIn = {
-    formatTanggal: formatTanggal,
-    formatRupiah: formatRupiah,
-  };
+  window.ProkerIn = window.ProkerIn || {};
+  window.ProkerIn.formatTanggal = formatTanggal;
+  window.ProkerIn.formatRupiah = formatRupiah;
 
-  // Inisialisasi saat DOM siap
   document.addEventListener("DOMContentLoaded", function () {
     initSidebarToggle();
     initLogout();

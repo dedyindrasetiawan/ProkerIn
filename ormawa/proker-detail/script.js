@@ -1,206 +1,14 @@
 /* eslint-env browser */
-/* global console, ProkerIn */
+/* global console, ProkerIn, sb, URLSearchParams, confirm */
 
 /* ============================================
    ProkerIn — Proker Detail Script
-   Baca ?id= dari URL, render data dummy,
-   update progress & upload LPJ (simulasi)
+   Baca ?id= dari URL, render data dari Supabase,
+   update progress & upload LPJ (Supabase Storage)
    ============================================ */
 
 (function () {
   "use strict";
-
-  /* ============================================
-     Data dummy — mirror dari dashboard
-     ============================================ */
-  const dummyProker = [
-    {
-      id: 1,
-      nama: "Pelatihan Public Speaking Anggota Baru",
-      tujuan:
-        "Meningkatkan kemampuan public speaking anggota baru HMP PTI agar mampu menyampaikan gagasan secara terstruktur dan percaya diri dalam forum akademik maupun organisasi.",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-05",
-      jadwal_selesai: "2025-11-07",
-      anggaran: 2500000,
-      pj_nama: "Ahmad Fauzi",
-      pj_jabatan: "Ketua Divisi Pengembangan SDM",
-      status_pengajuan: "disetujui",
-      status_progress: "berjalan",
-      diajukan_pada: "2025-10-15T09:30:00",
-      lpj: null,
-    },
-    {
-      id: 2,
-      nama: "Seminar Nasional Teknologi Pendidikan",
-      tujuan:
-        "Menghadirkan pakar teknologi pendidikan untuk membahas tren pembelajaran digital dan memberikan wawasan kepada mahasiswa tentang peluang karier di bidang edtech.",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-01",
-      jadwal_selesai: "2025-12-01",
-      anggaran: 7500000,
-      pj_nama: "Siti Nurhaliza",
-      pj_jabatan: "Sekretaris Umum",
-      status_pengajuan: "diajukan",
-      status_progress: "belum_mulai",
-      diajukan_pada: "2025-10-20T14:15:00",
-      lpj: null,
-    },
-    {
-      id: 3,
-      nama: "Bakti Sosial Desa Binaan",
-      tujuan:
-        "Mengimplementasikan nilai pengabdian masyarakat melalui kegiatan bakti sosial di desa binaan, sekaligus mempererat hubungan antara kampus dan masyarakat sekitar.",
-      kategori: "non_pendanaan",
-      jadwal_mulai: "2025-10-20",
-      jadwal_selesai: "2025-10-21",
-      anggaran: 0,
-      pj_nama: "Budi Santoso",
-      pj_jabatan: "Ketua Divisi Sosial Masyarakat",
-      status_pengajuan: "disetujui",
-      status_progress: "selesai",
-      diajukan_pada: "2025-10-01T10:00:00",
-      lpj: {
-        nama: "LPJ-Baksos-Desa-Binaan.pdf",
-        tanggal_upload: "2025-10-25T16:30:00",
-        status_verifikasi: "terverifikasi",
-      },
-    },
-    {
-      id: 4,
-      nama: "Workshop Desain Grafis untuk Anggota",
-      tujuan:
-        "Membekali anggota dengan keterampilan desain grafis dasar menggunakan tools populer untuk menunjang publikasi kegiatan ormawa.",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-11-15",
-      jadwal_selesai: "2025-11-16",
-      anggaran: 3000000,
-      pj_nama: "Rina Marlina",
-      pj_jabatan: "Ketua Divisi Media",
-      status_pengajuan: "direvisi",
-      status_progress: "belum_mulai",
-      diajukan_pada: "2025-10-12T11:20:00",
-      lpj: null,
-    },
-    {
-      id: 5,
-      nama: "Lomba Cerdas Cermat Antar Kelas",
-      tujuan:
-        "Meningkatkan semangat kompetisi akademik dan mempererat tali persaudaraan antar kelas di lingkungan program studi.",
-      kategori: "pendanaan",
-      jadwal_mulai: "2025-12-10",
-      jadwal_selesai: "2025-12-12",
-      anggaran: 4500000,
-      pj_nama: "Dedi Kurniawan",
-      pj_jabatan: "Wakil Ketua",
-      status_pengajuan: "ditolak",
-      status_progress: "belum_mulai",
-      diajukan_pada: "2025-10-18T13:45:00",
-      lpj: null,
-    },
-    {
-      id: 6,
-      nama: "Pelatihan Kepemimpinan Dasar",
-      tujuan:
-        "Membentuk karakter kepemimpinan anggota melalui pelatihan manajemen organisasi, komunikasi, dan pengambilan keputusan.",
-      kategori: "pendanaan",
-      jadwal_mulai: "2026-01-08",
-      jadwal_selesai: "2026-01-10",
-      anggaran: 5000000,
-      pj_nama: "Ahmad Fauzi",
-      pj_jabatan: "Ketua Divisi Pengembangan SDM",
-      status_pengajuan: "disetujui",
-      status_progress: "ditunda",
-      diajukan_pada: "2025-10-05T08:00:00",
-      lpj: null,
-    },
-  ];
-
-  /* ============================================
-     Data dummy log persetujuan (per proker_id)
-     ============================================ */
-  const dummyLog = {
-    1: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-15T09:30:00",
-        catatan: "Pengajuan proker baru untuk periode 2025/2026.",
-      },
-      {
-        aksi: "disetujui",
-        oleh: "Admin Kemahasiswaan",
-        tanggal: "2025-10-17T14:00:00",
-        catatan: "Proposal lengkap, silakan dilaksanakan sesuai jadwal.",
-      },
-    ],
-    2: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-20T14:15:00",
-        catatan: "Pengajuan proker baru.",
-      },
-    ],
-    3: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-01T10:00:00",
-        catatan: "Pengajuan proker non-pendanaan.",
-      },
-      {
-        aksi: "disetujui",
-        oleh: "Admin Kemahasiswaan",
-        tanggal: "2025-10-03T09:15:00",
-        catatan: "Disetujui, kegiatan bermanfaat bagi masyarakat.",
-      },
-    ],
-    4: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-12T11:20:00",
-        catatan: "Pengajuan proker baru.",
-      },
-      {
-        aksi: "revisi",
-        oleh: "Admin Kemahasiswaan",
-        tanggal: "2025-10-14T10:30:00",
-        catatan:
-          "Rincian anggaran konsumsi dan honor pemateri belum dilampirkan. Mohon dilengkapi dan diajukan ulang.",
-      },
-    ],
-    5: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-18T13:45:00",
-        catatan: "Pengajuan proker baru.",
-      },
-      {
-        aksi: "ditolak",
-        oleh: "Admin Kemahasiswaan",
-        tanggal: "2025-10-19T15:20:00",
-        catatan:
-          "Anggaran melebihi pagu periode ini dan jadwal berbenturan dengan kegiatan fakultas.",
-      },
-    ],
-    6: [
-      {
-        aksi: "diajukan",
-        oleh: "Ahmad Fauzi",
-        tanggal: "2025-10-05T08:00:00",
-        catatan: "Pengajuan proker baru.",
-      },
-      {
-        aksi: "disetujui",
-        oleh: "Admin Kemahasiswaan",
-        tanggal: "2025-10-07T11:00:00",
-        catatan: "Disetujui, harap koordinasi dengan pihak terkait.",
-      },
-    ],
-  };
 
   /* ============================================
      Mapping label & badge
@@ -240,6 +48,38 @@
     menunggu: "badge bg-warning text-dark",
     terverifikasi: "badge bg-success",
     ditolak: "badge bg-danger",
+  };
+
+  // Vocabulary log_proker.aksi (lebih lengkap dari status_pengajuan)
+  const labelAksi = {
+    diajukan: "Diajukan",
+    direvisi: "Direvisi",
+    disetujui: "Disetujui",
+    ditolak: "Ditolak",
+    progress_diperbarui: "Progress Diperbarui",
+    lpj_diunggah: "LPJ Diunggah",
+    lpj_diverifikasi: "LPJ Terverifikasi",
+    lpj_ditolak: "LPJ Ditolak",
+  };
+  const iconAksi = {
+    diajukan: "bi-send",
+    direvisi: "bi-pencil",
+    disetujui: "bi-check2",
+    ditolak: "bi-x-lg",
+    progress_diperbarui: "bi-arrow-repeat",
+    lpj_diunggah: "bi-upload",
+    lpj_diverifikasi: "bi-patch-check",
+    lpj_ditolak: "bi-patch-exclamation",
+  };
+  const dotClassAksi = {
+    diajukan: "timeline__dot--diajukan",
+    direvisi: "timeline__dot--revisi",
+    disetujui: "timeline__dot--disetujui",
+    ditolak: "timeline__dot--ditolak",
+    progress_diperbarui: "timeline__dot--diajukan",
+    lpj_diunggah: "timeline__dot--diajukan",
+    lpj_diverifikasi: "timeline__dot--disetujui",
+    lpj_ditolak: "timeline__dot--ditolak",
   };
 
   /* ============================================
@@ -289,18 +129,12 @@
       .replace(/'/g, "&#039;");
   }
 
-  /* ============================================
-     Ambil id dari query string
-     ============================================ */
   function getIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get("id"), 10);
     return isNaN(id) ? null : id;
   }
 
-  /* ============================================
-     Tampilkan alert
-     ============================================ */
   function showAlert(message, type) {
     const el = document.getElementById("pageAlert");
     if (!el) return;
@@ -344,14 +178,14 @@
     document.getElementById("heroPj").textContent =
       p.pj_nama + (p.pj_jabatan ? " (" + p.pj_jabatan + ")" : "");
     document.getElementById("heroDiajukan").textContent = formatDatetime(
-      p.diajukan_pada
+      p.created_at
     );
   }
 
   /* ============================================
      Render sidebar kanan
      ============================================ */
-  function renderSidebar(p) {
+  function renderSidebar(p, logs) {
     const elSp = document.getElementById("sideStatusPengajuan");
     elSp.className = "badge-status " + badgePengajuan[p.status_pengajuan];
     elSp.textContent = labelPengajuan[p.status_pengajuan];
@@ -363,20 +197,19 @@
     document.getElementById("sideKategori").textContent =
       p.kategori === "pendanaan" ? "Pendanaan" : "Non-pendanaan";
 
-    // Catatan revisi terakhir
-    const logList = dummyLog[p.id] || [];
-    const lastCatatan = [...logList]
-      .reverse()
-      .find(function (l) {
-        return l.catatan;
-      });
+    // Catatan revisi terakhir (aksi diajukan/direvisi/disetujui/ditolak yang punya catatan)
+    const lastCatatan = logs
+      .filter(function (l) {
+        return l.catatan && ["direvisi", "ditolak", "disetujui"].indexOf(l.aksi) !== -1;
+      })
+      .slice(-1)[0];
 
     const box = document.getElementById("catatanRevisiBox");
     if (lastCatatan) {
       box.classList.remove("catatan-box--empty");
       box.innerHTML =
         "<strong>" +
-        escapeHtml(labelPengajuan[lastCatatan.aksi] || lastCatatan.aksi) +
+        escapeHtml(labelAksi[lastCatatan.aksi] || lastCatatan.aksi) +
         "</strong><br />" +
         escapeHtml(lastCatatan.catatan);
     } else {
@@ -388,9 +221,8 @@
   /* ============================================
      Render timeline
      ============================================ */
-  function renderTimeline(p) {
+  function renderTimeline(logs) {
     const list = document.getElementById("timelineList");
-    const logs = dummyLog[p.id] || [];
 
     if (!logs.length) {
       list.innerHTML =
@@ -398,38 +230,24 @@
       return;
     }
 
-    const iconMap = {
-      diajukan: "bi-send",
-      disetujui: "bi-check2",
-      revisi: "bi-pencil",
-      ditolak: "bi-x-lg",
-    };
-
-    const dotClassMap = {
-      diajukan: "timeline__dot--diajukan",
-      disetujui: "timeline__dot--disetujui",
-      revisi: "timeline__dot--revisi",
-      ditolak: "timeline__dot--ditolak",
-    };
-
     list.innerHTML = logs
       .map(function (l) {
         return (
           '<li class="timeline__item">' +
             '<span class="timeline__dot ' +
-              (dotClassMap[l.aksi] || "") +
+              (dotClassAksi[l.aksi] || "") +
             '">' +
-              '<i class="bi ' + (iconMap[l.aksi] || "bi-circle") + '"></i>' +
+              '<i class="bi ' + (iconAksi[l.aksi] || "bi-circle") + '"></i>' +
             "</span>" +
             '<div class="timeline__header">' +
               '<h4 class="timeline__title">' +
-                escapeHtml(labelPengajuan[l.aksi] || l.aksi) +
+                escapeHtml(labelAksi[l.aksi] || l.aksi) +
               "</h4>" +
               '<span class="timeline__time">' +
-                escapeHtml(formatDatetime(l.tanggal)) +
+                escapeHtml(formatDatetime(l.created_at)) +
               "</span>" +
             "</div>" +
-            '<p class="timeline__actor">oleh ' + escapeHtml(l.oleh) + "</p>" +
+            '<p class="timeline__actor">oleh ' + escapeHtml(l.oleh_nama) + "</p>" +
             (l.catatan
               ? '<p class="timeline__catatan">' + escapeHtml(l.catatan) + "</p>"
               : "") +
@@ -440,52 +258,140 @@
   }
 
   /* ============================================
-     Progress options
+     Progress
      ============================================ */
   function setupProgress(p) {
     const isLocked = p.status_pengajuan !== "disetujui";
 
     const lockNotice = document.getElementById("progressLocked");
     if (isLocked) lockNotice.classList.remove("d-none");
+    else lockNotice.classList.add("d-none");
 
     const radios = document.querySelectorAll('input[name="progress"]');
     radios.forEach(function (r) {
-      if (r.value === p.status_progress) r.checked = true;
-      if (isLocked) r.disabled = true;
+      r.checked = r.value === p.status_progress;
+      r.disabled = isLocked;
     });
 
-    if (isLocked) {
-      const saveBtn = document.getElementById("saveProgressBtn");
-      saveBtn.disabled = true;
-      saveBtn.title = "Proker belum disetujui.";
-    }
+    const saveBtn = document.getElementById("saveProgressBtn");
+    saveBtn.disabled = isLocked;
+    saveBtn.title = isLocked ? "Proker belum disetujui." : "";
+  }
+
+  function setupSaveProgress(p, onChanged) {
+    const btn = document.getElementById("saveProgressBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", function () {
+      const checked = document.querySelector('input[name="progress"]:checked');
+      if (!checked) {
+        showAlert("Pilih status progress terlebih dahulu.", "danger");
+        return;
+      }
+      if (checked.value === p.status_progress) {
+        showAlert("Status progress tidak berubah.", "warning");
+        return;
+      }
+
+      const spinner = document.getElementById("saveProgressSpinner");
+      const icon = document.getElementById("saveProgressIcon");
+      const text = document.getElementById("saveProgressText");
+
+      btn.disabled = true;
+      spinner.classList.remove("d-none");
+      icon.classList.add("d-none");
+      text.textContent = "Menyimpan...";
+
+      sb
+        .from("proker")
+        .update({ status_progress: checked.value })
+        .eq("id", p.id)
+        .then(function (res) {
+          spinner.classList.add("d-none");
+          icon.classList.remove("d-none");
+          text.textContent = "Simpan Progress";
+          btn.disabled = false;
+
+          if (res.error) {
+            console.error("[ProkerIn] Gagal update progress:", res.error);
+            showAlert("Gagal menyimpan progress: " + res.error.message, "danger");
+            return;
+          }
+
+          p.status_progress = checked.value;
+
+          const badge = badgeProgress[p.status_progress];
+          const label = labelProgress[p.status_progress];
+
+          const heroPr = document.getElementById("heroStatusProgress");
+          heroPr.className = "badge-status " + badge;
+          heroPr.textContent = label;
+
+          const sidePr = document.getElementById("sideStatusProgress");
+          sidePr.className = "badge-status " + badge;
+          sidePr.textContent = label;
+
+          console.log("[ProkerIn] Progress diupdate:", p.status_progress);
+          showAlert("Status progress berhasil diperbarui.", "success");
+
+          if (onChanged) onChanged();
+        });
+    });
   }
 
   /* ============================================
-     Setup LPJ
+     LPJ
      ============================================ */
-  function setupLpj(p) {
+  async function muatLpj(prokerId) {
+    const { data, error } = await sb
+      .from("lpj")
+      .select("*")
+      .eq("proker_id", prokerId)
+      .maybeSingle();
+    if (error) {
+      console.error("[ProkerIn] Gagal memuat LPJ:", error);
+      return null;
+    }
+    return data;
+  }
+
+  function tampilkanLpjExisting(lpjRow) {
+    document.getElementById("lpjExisting").classList.remove("d-none");
+    document.getElementById("lpjUpload").classList.add("d-none");
+    document.getElementById("lpjNama").textContent = lpjRow.file_nama;
+    document.getElementById("lpjMeta").textContent =
+      "Diunggah: " + formatDatetime(lpjRow.uploaded_at);
+
+    const badge = document.getElementById("lpjStatus");
+    badge.className =
+      "badge-status " +
+      (badgeVerifikasi[lpjRow.status_verifikasi] || "badge bg-secondary");
+    badge.textContent =
+      labelVerifikasi[lpjRow.status_verifikasi] || lpjRow.status_verifikasi;
+  }
+
+  function setupLpj(p, lpjRow, onChanged) {
     const existing = document.getElementById("lpjExisting");
     const upload = document.getElementById("lpjUpload");
 
-    if (p.lpj) {
-      existing.classList.remove("d-none");
-      upload.classList.add("d-none");
-      document.getElementById("lpjNama").textContent = p.lpj.nama;
-      document.getElementById("lpjMeta").textContent =
-        "Diunggah: " + formatDatetime(p.lpj.tanggal_upload);
+    const bolehUnggahUlang = lpjRow && lpjRow.status_verifikasi === "ditolak";
 
-      const badge = document.getElementById("lpjStatus");
-      badge.className =
-        "badge-status " +
-        (badgeVerifikasi[p.lpj.status_verifikasi] || "badge bg-secondary");
-      badge.textContent =
-        labelVerifikasi[p.lpj.status_verifikasi] || p.lpj.status_verifikasi;
+    if (lpjRow && !bolehUnggahUlang) {
+      tampilkanLpjExisting(lpjRow);
       return;
     }
 
     existing.classList.add("d-none");
     upload.classList.remove("d-none");
+
+    if (bolehUnggahUlang) {
+      showAlert(
+        "LPJ sebelumnya ditolak" +
+          (lpjRow.catatan_verifikasi ? ": " + lpjRow.catatan_verifikasi : "") +
+          ". Silakan unggah ulang.",
+        "warning"
+      );
+    }
 
     // Lock upload kalau belum disetujui / belum berjalan
     const allowed =
@@ -504,10 +410,33 @@
       return;
     }
 
-    setupLpjInteractions();
+    setupLpjInteractions(p, onChanged);
   }
 
-  function setupLpjInteractions() {
+  async function unggahLpj(p, file, deskripsi) {
+    const ext = (file.name.split(".").pop() || "bin").toLowerCase();
+    const path = p.id + "/lpj." + ext;
+
+    const upRes = await sb.storage
+      .from("lpj")
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (upRes.error) return { error: upRes.error };
+
+    const payload = {
+      proker_id: p.id,
+      file_path: path,
+      file_nama: file.name,
+      deskripsi: deskripsi,
+    };
+
+    return sb
+      .from("lpj")
+      .upsert(payload, { onConflict: "proker_id" })
+      .select()
+      .single();
+  }
+
+  function setupLpjInteractions(p, onChanged) {
     const fileInput = document.getElementById("lpjFile");
     const dropzone = document.getElementById("lpjDropzone");
     const selected = document.getElementById("lpjSelected");
@@ -554,7 +483,6 @@
       }
     });
 
-    // Drag & drop
     ["dragenter", "dragover"].forEach(function (ev) {
       dropzone.addEventListener(ev, function (e) {
         e.preventDefault();
@@ -586,7 +514,6 @@
       refresh();
     });
 
-    // Submit upload (simulasi)
     uploadBtn.addEventListener("click", function () {
       if (!currentFile) return;
       if (deskripsi.value.trim().length < 20) {
@@ -603,124 +530,89 @@
       icon.classList.add("d-none");
       text.textContent = "Mengunggah...";
 
-      setTimeout(function () {
+      unggahLpj(p, currentFile, deskripsi.value.trim()).then(function (res) {
         spinner.classList.add("d-none");
         icon.classList.remove("d-none");
         text.textContent = "Unggah LPJ";
+        uploadBtn.disabled = false;
 
-        console.log("[ProkerIn] LPJ diunggah:", {
-          file: currentFile.name,
-          deskripsi: deskripsi.value.trim(),
-        });
+        if (res.error) {
+          console.error("[ProkerIn] Gagal unggah LPJ:", res.error);
+          showAlert("Gagal mengunggah LPJ: " + res.error.message, "danger");
+          return;
+        }
 
+        console.log("[ProkerIn] LPJ diunggah:", res.data);
         showAlert(
           "LPJ berhasil diunggah. Menunggu verifikasi Admin Kemahasiswaan.",
           "success"
         );
 
-        // Simulasi tampilkan kartu existing
-        document.getElementById("lpjExisting").classList.remove("d-none");
-        document.getElementById("lpjUpload").classList.add("d-none");
-        document.getElementById("lpjNama").textContent = currentFile.name;
-        document.getElementById("lpjMeta").textContent =
-          "Diunggah: baru saja";
-
-        const badge = document.getElementById("lpjStatus");
-        badge.className = "badge-status " + badgeVerifikasi.menunggu;
-        badge.textContent = labelVerifikasi.menunggu;
-      }, 1300);
-    });
-  }
-
-  /* ============================================
-     Simpan progress (simulasi)
-     ============================================ */
-  function setupSaveProgress(p) {
-    const btn = document.getElementById("saveProgressBtn");
-    if (!btn) return;
-
-    btn.addEventListener("click", function () {
-      const checked = document.querySelector('input[name="progress"]:checked');
-      if (!checked) {
-        showAlert("Pilih status progress terlebih dahulu.", "danger");
-        return;
-      }
-      if (checked.value === p.status_progress) {
-        showAlert("Status progress tidak berubah.", "warning");
-        return;
-      }
-
-      const spinner = document.getElementById("saveProgressSpinner");
-      const icon = document.getElementById("saveProgressIcon");
-      const text = document.getElementById("saveProgressText");
-
-      btn.disabled = true;
-      spinner.classList.remove("d-none");
-      icon.classList.add("d-none");
-      text.textContent = "Menyimpan...";
-
-      setTimeout(function () {
-        spinner.classList.add("d-none");
-        icon.classList.remove("d-none");
-        text.textContent = "Simpan Progress";
-        btn.disabled = false;
-
-        p.status_progress = checked.value;
-
-        // Update semua badge di halaman
-        const badge = badgeProgress[p.status_progress];
-        const label = labelProgress[p.status_progress];
-
-        const heroPr = document.getElementById("heroStatusProgress");
-        heroPr.className = "badge-status " + badge;
-        heroPr.textContent = label;
-
-        const sidePr = document.getElementById("sideStatusProgress");
-        sidePr.className = "badge-status " + badge;
-        sidePr.textContent = label;
-
-        console.log("[ProkerIn] Progress diupdate:", p.status_progress);
-        showAlert("Status progress berhasil diperbarui.", "success");
-      }, 900);
+        tampilkanLpjExisting(res.data);
+        if (onChanged) onChanged();
+      });
     });
   }
 
   /* ============================================
      Inisialisasi
      ============================================ */
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", async function () {
+    await ProkerIn.ready;
+
     const id = getIdFromUrl();
     const loading = document.getElementById("loadingState");
     const content = document.getElementById("detailContent");
 
-    // Simulasi loading singkat
-    setTimeout(function () {
+    if (!id) {
       loading.classList.add("d-none");
+      showAlert("ID proker tidak ditemukan di URL.", "danger");
+      return;
+    }
 
-      if (!id) {
-        showAlert(
-          "ID proker tidak ditemukan di URL. Menampilkan proker contoh (ID 1).",
-          "warning"
-        );
-      }
+    const [prokerRes, logRes, lpjRow] = await Promise.all([
+      sb.from("proker").select("*").eq("id", id).single(),
+      sb
+        .from("log_proker")
+        .select("*")
+        .eq("proker_id", id)
+        .order("created_at", { ascending: true }),
+      muatLpj(id),
+    ]);
 
-      const proker = dummyProker.find(function (x) {
-        return x.id === (id || 1);
-      });
+    loading.classList.add("d-none");
 
-      if (!proker) {
-        showAlert("Proker dengan ID tersebut tidak ditemukan.", "danger");
-        return;
-      }
+    if (prokerRes.error || !prokerRes.data) {
+      console.error("[ProkerIn] Gagal memuat proker:", prokerRes.error);
+      showAlert(
+        "Proker dengan ID tersebut tidak ditemukan, atau Anda tidak berhak mengaksesnya.",
+        "danger"
+      );
+      return;
+    }
 
-      content.classList.remove("d-none");
+    const proker = prokerRes.data;
+    let logs = logRes.data || [];
 
-      renderHero(proker);
-      renderSidebar(proker);
-      renderTimeline(proker);
-      setupProgress(proker);
-      setupLpj(proker);
-      setupSaveProgress(proker);
-    }, 350);
+    content.classList.remove("d-none");
+
+    renderHero(proker);
+    renderSidebar(proker, logs);
+    renderTimeline(logs);
+    setupProgress(proker);
+
+    async function muatUlangLog() {
+      const { data } = await sb
+        .from("log_proker")
+        .select("*")
+        .eq("proker_id", id)
+        .order("created_at", { ascending: true });
+      logs = data || [];
+      renderSidebar(proker, logs);
+      renderTimeline(logs);
+    }
+
+    setupSaveProgress(proker, muatUlangLog);
+    setupLpj(proker, lpjRow, muatUlangLog);
   });
 })();

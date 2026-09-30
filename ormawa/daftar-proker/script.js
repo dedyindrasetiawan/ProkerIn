@@ -2,17 +2,14 @@
 /* global console, ProkerIn, sb, alert */
 
 /* ============================================
-   ProkerIn — Ormawa Dashboard Script
-   Data dari Supabase + statistik + aktivitas terbaru
+   ProkerIn — Daftar Proker Script
+   Data dari Supabase + render tabel + filter + pencarian
    ============================================ */
 
 (function () {
   "use strict";
 
-  /* ============================================
-     Data dummy proker (nanti diganti dari backend)
-     ============================================ */
-  // Data diambil dari Supabase (tabel "proker"); RLS otomatis memfilter per ormawa
+  let semuaProker = [];
 
   /* ============================================
      Mapping label & class badge untuk status
@@ -72,9 +69,6 @@
     return formatTanggalSingkat(mulai) + " – " + formatTanggalSingkat(selesai);
   }
 
-  /* ============================================
-     Escape HTML sederhana (keamanan dasar)
-     ============================================ */
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, "&amp;")
@@ -85,86 +79,99 @@
   }
 
   /* ============================================
-     Render statistik ringkasan
+     Render baris tabel
      ============================================ */
-  function renderStatistik(data) {
-    const counts = {
-      diajukan: 0,
-      disetujui: 0,
-      berjalan: 0,
-      selesai: 0,
-    };
-
-    data.forEach(function (p) {
-      if (p.status_pengajuan === "diajukan") counts.diajukan++;
-      if (p.status_pengajuan === "disetujui") counts.disetujui++;
-      if (p.status_progress === "berjalan") counts.berjalan++;
-      if (p.status_progress === "selesai") counts.selesai++;
-    });
-
-    const elDiajukan = document.getElementById("statDiajukan");
-    const elDisetujui = document.getElementById("statDisetujui");
-    const elBerjalan = document.getElementById("statBerjalan");
-    const elSelesai = document.getElementById("statSelesai");
-
-    if (elDiajukan) elDiajukan.textContent = counts.diajukan;
-    if (elDisetujui) elDisetujui.textContent = counts.disetujui;
-    if (elBerjalan) elBerjalan.textContent = counts.berjalan;
-    if (elSelesai) elSelesai.textContent = counts.selesai;
-  }
-
-  /* ============================================
-     Render aktivitas terbaru (5 proker terakhir)
-     ============================================ */
-  function renderAktivitas(data) {
-    const list = document.getElementById("aktivitasList");
+  function renderTabel(data) {
+    const tbody = document.getElementById("prokerTableBody");
     const emptyState = document.getElementById("emptyState");
-    if (!list) return;
+    const hasilCount = document.getElementById("hasilCount");
+    if (!tbody) return;
 
-    const terbaru = data
-      .slice()
-      .sort(function (a, b) {
-        return new Date(b.created_at) - new Date(a.created_at);
-      })
-      .slice(0, 5);
+    tbody.innerHTML = "";
 
-    list.innerHTML = "";
+    if (hasilCount) {
+      hasilCount.textContent =
+        "Menampilkan " + data.length + " dari " + semuaProker.length + " proker";
+    }
 
-    if (!terbaru.length) {
+    if (!data.length) {
       if (emptyState) emptyState.classList.remove("d-none");
       return;
     }
     if (emptyState) emptyState.classList.add("d-none");
 
-    terbaru.forEach(function (p) {
-      const li = document.createElement("li");
-      li.className =
-        "list-group-item d-flex justify-content-between align-items-center flex-wrap gap-2";
+    data.forEach(function (p) {
+      const tr = document.createElement("tr");
 
-      li.innerHTML =
-        '<div>' +
-          '<a href="../proker-detail/index.html?id=' + p.id + '" class="proker-table__nama d-block text-decoration-none">' +
+      const kategoriLabel =
+        p.kategori === "pendanaan" ? "Pendanaan" : "Non-pendanaan";
+
+      tr.innerHTML =
+        '<td>' +
+          '<span class="proker-table__nama">' +
             escapeHtml(p.nama) +
-          "</a>" +
-          '<span class="text-muted small">' +
-            escapeHtml(formatRentangTanggal(p.jadwal_mulai, p.jadwal_selesai)) +
           "</span>" +
-        "</div>" +
-        '<div class="d-flex gap-2">' +
+          '<span class="proker-table__kategori">' +
+            escapeHtml(kategoriLabel) +
+          "</span>" +
+        "</td>" +
+        '<td class="proker-table__jadwal">' +
+          '<i class="bi bi-calendar-event"></i>' +
+          escapeHtml(formatRentangTanggal(p.jadwal_mulai, p.jadwal_selesai)) +
+        "</td>" +
+        '<td class="proker-table__jadwal">' +
+          escapeHtml(formatRupiah(p.anggaran)) +
+        "</td>" +
+        "<td>" +
           '<span class="' +
             (badgePengajuan[p.status_pengajuan] || "badge bg-secondary") +
             '">' +
             escapeHtml(labelPengajuan[p.status_pengajuan] || p.status_pengajuan) +
           "</span>" +
+        "</td>" +
+        "<td>" +
           '<span class="' +
             (badgeProgress[p.status_progress] || "badge bg-secondary") +
             '">' +
             escapeHtml(labelProgress[p.status_progress] || p.status_progress) +
           "</span>" +
-        "</div>";
+        "</td>" +
+        '<td class="text-end">' +
+          '<a href="../proker-detail/index.html?id=' +
+            p.id +
+            '" class="btn-detail" ' +
+            'aria-label="Lihat detail proker ' +
+            escapeHtml(p.nama) +
+            '">' +
+            '<i class="bi bi-eye"></i> Detail' +
+          "</a>" +
+        "</td>";
 
-      list.appendChild(li);
+      tbody.appendChild(tr);
     });
+  }
+
+  /* ============================================
+     Filter + pencarian
+     ============================================ */
+  function applyFilter() {
+    const fPengajuan = document.getElementById("filterPengajuan").value;
+    const fProgress = document.getElementById("filterProgress").value;
+    const kataKunci = document
+      .getElementById("searchNama")
+      .value.trim()
+      .toLowerCase();
+
+    const filtered = semuaProker.filter(function (p) {
+      if (fPengajuan && p.status_pengajuan !== fPengajuan) return false;
+      if (fProgress && p.status_progress !== fProgress) return false;
+      if (kataKunci && p.nama.toLowerCase().indexOf(kataKunci) === -1) {
+        return false;
+      }
+      return true;
+    });
+
+    renderTabel(filtered);
   }
 
   /* ============================================
@@ -185,8 +192,25 @@
 
   document.addEventListener("DOMContentLoaded", async function () {
     await ProkerIn.ready; // tunggu sesi & role terverifikasi
-    const data = await muatProker();
-    renderStatistik(data);
-    renderAktivitas(data);
+    semuaProker = await muatProker();
+    renderTabel(semuaProker);
+
+    const fPengajuan = document.getElementById("filterPengajuan");
+    const fProgress = document.getElementById("filterProgress");
+    const search = document.getElementById("searchNama");
+    const resetBtn = document.getElementById("resetFilter");
+
+    if (fPengajuan) fPengajuan.addEventListener("change", applyFilter);
+    if (fProgress) fProgress.addEventListener("change", applyFilter);
+    if (search) search.addEventListener("input", applyFilter);
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        fPengajuan.value = "";
+        fProgress.value = "";
+        search.value = "";
+        applyFilter();
+      });
+    }
   });
 })();

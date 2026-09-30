@@ -1,15 +1,17 @@
 /* eslint-env browser */
-/* global console, bootstrap, ProkerIn */
+/* global console, bootstrap, ProkerIn, sb */
 
 /* ============================================
    ProkerIn — Proker Baru Script
-   Validasi form + format input + simulasi submit
+   Validasi form + format input + kirim ke Supabase
    ============================================ */
 
 (function () {
   "use strict";
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", async function () {
+    await ProkerIn.ready;
+
     const form = document.getElementById("prokerForm");
     const alertBox = document.getElementById("formAlert");
 
@@ -298,43 +300,67 @@
         pj_jabatan: document.getElementById("pjJabatan").value.trim(),
       };
 
-      // Simulasi loading
       submitBtn.disabled = true;
       submitSpinner.classList.remove("d-none");
       if (submitIcon) submitIcon.classList.add("d-none");
       submitText.textContent = "Mengirim...";
 
-      // Simulasi request (delay 1.2 detik)
-      setTimeout(function () {
-        submitBtn.disabled = false;
-        submitSpinner.classList.add("d-none");
-        if (submitIcon) submitIcon.classList.remove("d-none");
-        submitText.textContent = "Ajukan Proker";
+      const payload = {
+        ormawa_id: ProkerIn.user && ProkerIn.user.ormawa_id,
+        nama: data.nama,
+        tujuan: data.tujuan,
+        kategori: data.kategori,
+        jadwal_mulai: data.jadwal_mulai,
+        jadwal_selesai: data.jadwal_selesai,
+        anggaran: data.anggaran,
+        pj_nama: data.pj_nama,
+        pj_jabatan: data.pj_jabatan,
+      };
 
-        console.log("[ProkerIn] Proker baru diajukan:", data);
+      sb
+        .from("proker")
+        .insert(payload)
+        .select()
+        .single()
+        .then(function (res) {
+          submitBtn.disabled = false;
+          submitSpinner.classList.add("d-none");
+          if (submitIcon) submitIcon.classList.remove("d-none");
+          submitText.textContent = "Ajukan Proker";
 
-        // Tampilkan modal sukses
-        const modalEl = document.getElementById("suksesModal");
-        if (modalEl && window.bootstrap) {
-          const modal = new bootstrap.Modal(modalEl);
-          modal.show();
+          if (res.error) {
+            console.error("[ProkerIn] Gagal mengirim proker:", res.error);
+            showAlert(
+              "Gagal mengirim pengajuan: " + res.error.message,
+              "danger"
+            );
+            return;
+          }
 
-          // Reset form saat modal ditutup (kecuali tombol "Ke Dashboard")
-          modalEl.addEventListener(
-            "hidden.bs.modal",
-            function () {
-              form.reset();
-              updateAnggaranState();
-              updateAnggaranPreview(0);
-              bindCounter(namaInput, "namaProkerCount");
-              bindCounter(tujuanInput, "tujuanProkerCount");
-            },
-            { once: true }
-          );
-        } else {
-          showAlert("Pengajuan berhasil dikirim!", "success");
-        }
-      }, 1200);
+          console.log("[ProkerIn] Proker baru diajukan:", res.data);
+
+          // Tampilkan modal sukses
+          const modalEl = document.getElementById("suksesModal");
+          if (modalEl && window.bootstrap) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+
+            // Reset form saat modal ditutup (kecuali tombol "Ke Dashboard")
+            modalEl.addEventListener(
+              "hidden.bs.modal",
+              function () {
+                form.reset();
+                updateAnggaranState();
+                updateAnggaranPreview(0);
+                bindCounter(namaInput, "namaProkerCount");
+                bindCounter(tujuanInput, "tujuanProkerCount");
+              },
+              { once: true }
+            );
+          } else {
+            showAlert("Pengajuan berhasil dikirim!", "success");
+          }
+        });
     });
 
     /* ============================================

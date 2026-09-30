@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dashboard Admin Kemahasiswaan — ProkerIn" />
-  <title>Dashboard Admin — ProkerIn</title>
+  <meta name="description" content="Daftar Program Kerja Ormawa — ProkerIn" />
+  <title>Daftar Proker — ProkerIn</title>
 
   <!-- Bootstrap 5 CSS -->
   <link
@@ -24,21 +24,21 @@
   <link rel="stylesheet" href="../../assets/css/variables.css" />
   <link rel="stylesheet" href="../../assets/css/layout.css" />
 
-  <!-- CSS khusus dashboard admin -->
+  <!-- CSS khusus halaman ini -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <!-- ============================================
-       SIDEBAR (role: Admin Kemahasiswaan)
+       SIDEBAR
        ============================================ -->
   <aside
     class="prokerin-sidebar"
     id="sidebar"
-    aria-label="Navigasi utama Admin Kemahasiswaan"
+    aria-label="Navigasi utama Ormawa"
   >
     <a
-      href="index.html"
+      href="../dashboard/index.html"
       class="prokerin-sidebar__brand"
       aria-label="Beranda ProkerIn"
     >
@@ -47,28 +47,33 @@
       </span>
       <span class="prokerin-sidebar__brand-text">
         ProkerIn
-        <span class="prokerin-sidebar__brand-tagline">Admin Kemahasiswaan</span>
+        <span class="prokerin-sidebar__brand-tagline">Monitoring Proker</span>
       </span>
     </a>
 
-    <nav class="prokerin-sidebar__nav" aria-label="Menu Admin">
-      <p class="prokerin-sidebar__section-label">Monitoring</p>
+    <nav class="prokerin-sidebar__nav" aria-label="Menu Ormawa">
+      <p class="prokerin-sidebar__section-label">Menu Utama</p>
 
-      <a href="index.html" class="prokerin-sidebar__link active">
+      <a href="../dashboard/index.html" class="prokerin-sidebar__link">
         <i class="bi bi-speedometer2" aria-hidden="true"></i>
         <span>Dashboard</span>
       </a>
 
-      <a href="../pengajuan/index.html" class="prokerin-sidebar__link">
-        <i class="bi bi-inbox" aria-hidden="true"></i>
-        <span>Pengajuan Proker</span>
+      <a href="../proker-baru/index.html" class="prokerin-sidebar__link">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i>
+        <span>Ajukan Proker Baru</span>
       </a>
 
-      <p class="prokerin-sidebar__section-label">Laporan</p>
+      <a href="index.html" class="prokerin-sidebar__link active">
+        <i class="bi bi-list-check" aria-hidden="true"></i>
+        <span>Daftar Proker</span>
+      </a>
 
-      <a href="../ekspor/index.html" class="prokerin-sidebar__link">
-        <i class="bi bi-download" aria-hidden="true"></i>
-        <span>Ekspor Laporan</span>
+      <p class="prokerin-sidebar__section-label">Arsip</p>
+
+      <a href="#" class="prokerin-sidebar__link">
+        <i class="bi bi-archive" aria-hidden="true"></i>
+        <span>Riwayat Periode</span>
       </a>
     </nav>
 
@@ -102,15 +107,17 @@
       >
         <i class="bi bi-list" aria-hidden="true"></i>
       </button>
-      <h1 class="prokerin-topbar__title">Dashboard Admin</h1>
+      <h1 class="prokerin-topbar__title">Daftar Proker</h1>
     </div>
 
     <div class="prokerin-topbar__user">
       <div class="prokerin-topbar__user-info d-none d-sm-block text-end">
-        <span class="prokerin-topbar__user-name">Dewi Anggraini</span>
-        <span class="prokerin-topbar__user-role">Admin Kemahasiswaan</span>
+        <span class="prokerin-topbar__user-name" data-user-name>-</span>
+        <span class="prokerin-topbar__user-role">Ketua Ormawa</span>
       </div>
-      <div class="prokerin-topbar__avatar" aria-hidden="true">DA</div>
+      <div class="prokerin-topbar__avatar" aria-hidden="true">
+        <i class="bi bi-person-fill" aria-hidden="true"></i>
+      </div>
     </div>
   </header>
 
@@ -120,120 +127,58 @@
   <main class="prokerin-main" role="main">
     <div class="prokerin-content">
 
-      <!-- ===== Header ===== -->
-      <section class="dashboard-header" aria-labelledby="welcomeHeading">
-        <div>
-          <h2 class="dashboard-header__title" id="welcomeHeading">
-            Selamat datang, Dewi Anggraini 👋
-          </h2>
-          <p class="dashboard-header__subtitle">
-            <i class="bi bi-calendar3" aria-hidden="true"></i>
-            Periode Aktif 2025/2026 &middot; Rekap seluruh ormawa
-          </p>
-        </div>
-        <a
-          href="../pengajuan/index.html"
-          class="btn btn-prokerin dashboard-header__cta"
-        >
-          <i class="bi bi-inbox" aria-hidden="true"></i>
-          Lihat Antrian Pengajuan
-        </a>
-      </section>
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb prokerin-breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="../dashboard/index.html">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Daftar Proker
+          </li>
+        </ol>
+      </nav>
 
-      <!-- ===== Kartu statistik ===== -->
-      <section class="row g-3 mb-4" aria-label="Ringkasan proker se-kampus">
-        <div class="col-6 col-lg-3">
-          <article class="stat-card stat-card--diajukan">
-            <div class="stat-card__icon">
-              <i class="bi bi-hourglass-split" aria-hidden="true"></i>
-            </div>
-            <div class="stat-card__body">
-              <p class="stat-card__label">Menunggu Persetujuan</p>
-              <p class="stat-card__value" id="statDiajukan">0</p>
-            </div>
-          </article>
-        </div>
-
-        <div class="col-6 col-lg-3">
-          <article class="stat-card stat-card--disetujui">
-            <div class="stat-card__icon">
-              <i class="bi bi-patch-check" aria-hidden="true"></i>
-            </div>
-            <div class="stat-card__body">
-              <p class="stat-card__label">Disetujui</p>
-              <p class="stat-card__value" id="statDisetujui">0</p>
-            </div>
-          </article>
-        </div>
-
-        <div class="col-6 col-lg-3">
-          <article class="stat-card stat-card--berjalan">
-            <div class="stat-card__icon">
-              <i class="bi bi-play-circle" aria-hidden="true"></i>
-            </div>
-            <div class="stat-card__body">
-              <p class="stat-card__label">Berjalan</p>
-              <p class="stat-card__value" id="statBerjalan">0</p>
-            </div>
-          </article>
-        </div>
-
-        <div class="col-6 col-lg-3">
-          <article class="stat-card stat-card--selesai">
-            <div class="stat-card__icon">
-              <i class="bi bi-check2-circle" aria-hidden="true"></i>
-            </div>
-            <div class="stat-card__body">
-              <p class="stat-card__label">Selesai</p>
-              <p class="stat-card__value" id="statSelesai">0</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- ===== Rekap per ormawa ===== -->
-      <section class="prokerin-card mb-4" aria-labelledby="rekapOrmawaHeading">
+      <!-- ===== Panel tabel proker ===== -->
+      <section class="prokerin-card" aria-labelledby="tabelProkerHeading">
         <header class="panel-header">
           <div>
-            <h3 class="panel-header__title" id="rekapOrmawaHeading">
-              Rekap per Ormawa
+            <h3 class="panel-header__title" id="tabelProkerHeading">
+              Daftar Program Kerja
             </h3>
             <p class="panel-header__subtitle">
-              Distribusi jumlah proker tiap organisasi
+              Seluruh proker ormawa Anda pada periode aktif
             </p>
           </div>
-        </header>
-
-        <div class="row g-3" id="rekapOrmawaList">
-          <!-- Diisi JS -->
-        </div>
-      </section>
-
-      <!-- ===== Tabel semua pengajuan ===== -->
-      <section class="prokerin-card" aria-labelledby="tabelPengajuanHeading">
-        <header class="panel-header">
-          <div>
-            <h3 class="panel-header__title" id="tabelPengajuanHeading">
-              Semua Pengajuan Proker
-            </h3>
-            <p class="panel-header__subtitle">
-              Daftar proker dari seluruh ormawa pada periode aktif
-            </p>
-          </div>
-          <span class="panel-header__count" id="totalCount">0 proker</span>
+          <a
+            href="../proker-baru/index.html"
+            class="btn btn-prokerin btn-sm"
+          >
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Ajukan Proker Baru
+          </a>
         </header>
 
         <!-- Filter -->
         <div class="row g-2 mb-3 panel-filters">
-          <div class="col-12 col-md-3">
-            <label for="filterOrmawa" class="visually-hidden">Filter ormawa</label>
-            <select class="form-select form-select-sm" id="filterOrmawa">
-              <option value="">Semua Ormawa</option>
-              <!-- diisi JS -->
-            </select>
+          <div class="col-12 col-md-4">
+            <label for="searchNama" class="visually-hidden">
+              Cari nama proker
+            </label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-white">
+                <i class="bi bi-search" aria-hidden="true"></i>
+              </span>
+              <input
+                type="search"
+                class="form-control"
+                id="searchNama"
+                placeholder="Cari nama proker..."
+              />
+            </div>
           </div>
 
-          <div class="col-12 col-md-3">
+          <div class="col-6 col-md-3">
             <label for="filterPengajuan" class="visually-hidden">
               Filter status pengajuan
             </label>
@@ -246,7 +191,7 @@
             </select>
           </div>
 
-          <div class="col-12 col-md-3">
+          <div class="col-6 col-md-3">
             <label for="filterProgress" class="visually-hidden">
               Filter status progress
             </label>
@@ -259,28 +204,30 @@
             </select>
           </div>
 
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-md-2">
             <button
               type="button"
               class="btn btn-outline-secondary btn-sm w-100"
               id="resetFilter"
             >
               <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-              Reset Filter
+              Reset
             </button>
           </div>
         </div>
+
+        <!-- Jumlah hasil -->
+        <p class="text-muted small mb-2" id="hasilCount"></p>
 
         <!-- Tabel -->
         <div class="table-responsive">
           <table
             class="table table-hover align-middle proker-table mb-0"
-            aria-label="Tabel semua pengajuan proker"
+            aria-label="Tabel daftar program kerja ormawa"
           >
             <thead>
               <tr>
-                <th scope="col" style="min-width: 240px;">Nama Proker</th>
-                <th scope="col">Ormawa</th>
+                <th scope="col" style="min-width: 220px;">Nama Proker</th>
                 <th scope="col">Jadwal</th>
                 <th scope="col">Anggaran</th>
                 <th scope="col">Status Pengajuan</th>
@@ -289,7 +236,7 @@
               </tr>
             </thead>
             <tbody id="prokerTableBody">
-              <!-- diisi JS -->
+              <!-- Baris diisi oleh JavaScript -->
             </tbody>
           </table>
         </div>
@@ -297,14 +244,14 @@
         <!-- Empty state -->
         <div id="emptyState" class="empty-state d-none">
           <i class="bi bi-inbox" aria-hidden="true"></i>
-          <p class="empty-state__title">Tidak ada proker yang cocok</p>
+          <p class="empty-state__title">Belum ada proker yang cocok</p>
           <p class="empty-state__desc">
-            Coba ubah filter atau reset untuk melihat semua data.
+            Coba ubah kata kunci atau filter, atau ajukan proker baru.
           </p>
         </div>
       </section>
 
-      <!-- Footer -->
+      <!-- Footer kecil -->
       <footer class="dashboard-footer">
         <small>
           &copy; 2025 ProkerIn &middot; Sistem Informasi Monitoring Program
@@ -327,7 +274,7 @@
   <script src="../../assets/js/supabase.js"></script>
   <script src="../../assets/js/common.js"></script>
 
-  <!-- JS khusus dashboard admin -->
+  <!-- JS khusus halaman ini -->
   <script src="script.js"></script>
 </body>
-</html>
+</html> 

@@ -64,7 +64,7 @@
         <span>Ajukan Proker Baru</span>
       </a>
 
-      <a href="../proker-detail/index.html" class="prokerin-sidebar__link">
+      <a href="../daftar-proker/index.html" class="prokerin-sidebar__link">
         <i class="bi bi-list-check" aria-hidden="true"></i>
         <span>Daftar Proker</span>
       </a>
@@ -133,7 +133,7 @@
           </h2>
           <p class="dashboard-header__subtitle">
             <i class="bi bi-calendar3" aria-hidden="true"></i>
-            Periode 2025/2026 &middot; HMP PTI
+            Ringkasan proker ormawa Anda pada periode aktif
           </p>
         </div>
         <a
@@ -196,87 +196,33 @@
         </div>
       </section>
 
-      <!-- ===== Panel tabel proker ===== -->
-      <section class="prokerin-card" aria-labelledby="tabelProkerHeading">
+      <!-- ===== Aktivitas terbaru ===== -->
+      <section class="prokerin-card" aria-labelledby="aktivitasHeading">
         <header class="panel-header">
           <div>
-            <h3 class="panel-header__title" id="tabelProkerHeading">
-              Daftar Program Kerja
+            <h3 class="panel-header__title" id="aktivitasHeading">
+              Aktivitas Terbaru
             </h3>
             <p class="panel-header__subtitle">
-              Proker ormawa Anda pada periode aktif
+              5 proker terbaru yang diajukan ormawa Anda
             </p>
           </div>
+          <a href="../daftar-proker/index.html" class="btn btn-outline-secondary btn-sm">
+            Lihat Semua
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </a>
         </header>
 
-        <!-- Filter -->
-        <div class="row g-2 mb-3 panel-filters">
-          <div class="col-12 col-md-5">
-            <label for="filterPengajuan" class="visually-hidden">
-              Filter status pengajuan
-            </label>
-            <select class="form-select form-select-sm" id="filterPengajuan">
-              <option value="">Semua Status Pengajuan</option>
-              <option value="diajukan">Diajukan</option>
-              <option value="direvisi">Direvisi</option>
-              <option value="disetujui">Disetujui</option>
-              <option value="ditolak">Ditolak</option>
-            </select>
-          </div>
-
-          <div class="col-12 col-md-5">
-            <label for="filterProgress" class="visually-hidden">
-              Filter status progress
-            </label>
-            <select class="form-select form-select-sm" id="filterProgress">
-              <option value="">Semua Status Progress</option>
-              <option value="belum_mulai">Belum Mulai</option>
-              <option value="berjalan">Berjalan</option>
-              <option value="selesai">Selesai</option>
-              <option value="ditunda">Ditunda</option>
-            </select>
-          </div>
-
-          <div class="col-12 col-md-2">
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-sm w-100"
-              id="resetFilter"
-            >
-              <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-              Reset
-            </button>
-          </div>
-        </div>
-
-        <!-- Tabel -->
-        <div class="table-responsive">
-          <table
-            class="table table-hover align-middle proker-table mb-0"
-            aria-label="Tabel daftar program kerja ormawa"
-          >
-            <thead>
-              <tr>
-                <th scope="col" style="min-width: 220px;">Nama Proker</th>
-                <th scope="col">Jadwal</th>
-                <th scope="col">Anggaran</th>
-                <th scope="col">Status Pengajuan</th>
-                <th scope="col">Status Progress</th>
-                <th scope="col" class="text-end">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="prokerTableBody">
-              <!-- Baris diisi oleh JavaScript -->
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group list-group-flush" id="aktivitasList">
+          <!-- Diisi oleh JavaScript -->
+        </ul>
 
         <!-- Empty state -->
         <div id="emptyState" class="empty-state d-none">
           <i class="bi bi-inbox" aria-hidden="true"></i>
-          <p class="empty-state__title">Belum ada proker yang cocok</p>
+          <p class="empty-state__title">Belum ada proker yang diajukan</p>
           <p class="empty-state__desc">
-            Coba ubah filter, atau ajukan proker baru.
+            Mulai dengan mengajukan proker baru.
           </p>
         </div>
       </section>
@@ -300,6 +246,8 @@
   ></script>
 
   <!-- JS Global ProkerIn -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/js/supabase.js"></script>
   <script src="../../assets/js/common.js"></script>
 
   <!-- JS khusus dashboard -->
